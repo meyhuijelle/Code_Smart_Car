@@ -4,9 +4,9 @@
 
 **Baptiste Van der eecken:** schrijf hier de naam van jouw sparring partner. Deze persoon is jouw klankbord, redder in nood, motivator, partner in crime :-)
 
-**Projectsamenvatting in max 10 woorden:** schrijf hier jouw samenvatting
+**Projectsamenvatting in max 10 woorden:** Een met alcohol beveiligde key hanger/snelheidsdashbord maken.
 
-**Projecttitel:** plaats hier een catchy werktitel van jouw project
+**Projecttitel** Project Drive safer!!!
 
 # Tips voor feedbackgesprekken
 
