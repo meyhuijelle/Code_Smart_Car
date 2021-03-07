@@ -4,9 +4,9 @@
 
 **Baptiste Van der eecken:** schrijf hier de naam van jouw sparring partner. Deze persoon is jouw klankbord, redder in nood, motivator, partner in crime :-)
 
-**Projectsamenvatting in max 10 woorden:** Een met alcohol beveiligde key hanger/snelheidsdashbord maken.
+**Projectsamenvatting in max 10 woorden:** Smart car: slim dashbord, parkeersensor, lichtsensor voor oudere auto's.
 
-**Projecttitel** Project Drive safer!!!
+**Projecttitel** Project Smart Car
 
 # Tips voor feedbackgesprekken
 
