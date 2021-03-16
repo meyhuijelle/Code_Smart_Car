@@ -14,6 +14,12 @@
 
 > Bepaal voor jezelf waar je graag feedback op wil. Schrijf op voorhand een aantal punten op waar je zeker feedback over wil krijgen. Op die manier zal het feedbackgesprek gerichter verlopen en zullen vragen, die je zeker beantwoord wil hebben, aan bod komen.
 
+> Vraag 1: is het mogelijk mijn auto mee te nemen en zo te testen (op een parking bvb)
+> antw:
+> vraag 2: is het mogelijk om een pi in de auto te krijgen?
+> antw:
+> vraag 3: 
+
 ## Tijdens het gesprek:
 
 > **Luister actief:** Schiet niet onmiddellijk in de verdediging maar probeer goed te luisteren. Laat verbaal en non-verbaal ook zien dat je aandacht hebt voor de feedback door een open houding (oogcontact, rechte houding), door het maken van aantekeningen, knikken...
@@ -30,26 +36,31 @@
 
 > Herlees je notities en maak actiepunten. Maak keuzes uit alle feedback die je kreeg: Waar kan je mee aan de slag en wat laat je even rusten. Wat waren de prioriteiten? Neem de opdrachtfiche er nog eens bij om je focuspunten te bepalen.Noteer je actiepunten op de feedbackfiche.
 
+> punten om **aandacht** aan te besteden:
+> - De schakelaar --> vervangen door een drukknop!!!
+> - Een responsive button op de website dat de buzzer aan en uit kan schakelen (tonen op frontend).
+> - 12 volt naar 5 volt (opletten met ledstrip(veel stroom)) --> hulp van meneer.
+> - Niet op echte auto beginnen, maar begin met een kleine versie van een auto en later (als het af is) op de echte auto toepassen.
+
 # Feedforward gesprekken
 
-## Gesprek 1 (Datum: dd/mm/yyyy)
+## Gesprek 1 (Datum: 16/03/2021)
 
-Lector:
+Lector: Mnr. Desloovere Geert & Mevr. Eeckhout Claudia 
 
 Vragen voor dit gesprek:
 
-- [x] vraag 1:
-- [ ] vraag 2:
+- [x] vraag 1: Is het mogelijk mijn auto mee te nemen en zo te testen (op een parking bvb)
+- [ ] vraag 2: Is het mogelijk om een pi in de auto te krijgen?
 
 Dit is de feedback op mijn vragen.
 
-- feedback 1
-- feedback 2
-
+- feedback 1: Gebruik een kleine auto (zodat je niet moet zitten programmeren in de auto).
+- feedback 2: Ja, met speciale adapters (hulp van meneer).
 Hier komt de feedforward: wat ga ik concreet doen?
 
-- [ ] ToDo 1
-- [ ] ToDo 2
+- [ ] ToDo 1: Ik ga opzoek naar een kleine auto.
+- [ ] ToDo 2: Ik ga uitzoeken hoe ik met een speciale voeding de PI van stroom kan voorzien in mijn auto.
 
 ## Gesprek 2 (Datum: dd/mm/yyyy)
 
