@@ -51,7 +51,7 @@ Lector: Mnr. Desloovere Geert & Mevr. Eeckhout Claudia
 Vragen voor dit gesprek:
 
 - [x] vraag 1: Is het mogelijk mijn auto mee te nemen en zo te testen (op een parking bvb)
-- [ ] vraag 2: Is het mogelijk om een pi in de auto te krijgen?
+- [x] vraag 2: Is het mogelijk om een pi in de auto te krijgen?
 
 Dit is de feedback op mijn vragen.
 
