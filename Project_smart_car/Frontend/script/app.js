@@ -26,10 +26,8 @@ const listenToUI = function () {
 };
 
 const listenToSocket = function () {
-  console.log('JISDER')
   socket.on("connected", function () {
     console.log("verbonden met socket webserver");
-    console.log('jisder')
   });
 
   socket.on("B2F_status_lampen", function (jsonObject) {
