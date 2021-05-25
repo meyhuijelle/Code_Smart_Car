@@ -26,7 +26,7 @@ const listenToUI = function () {
 };
 
 const listenToSocket = function () {
-  console.log('JISDER')
+  console.log('lkJMLDKJFMLKQSDJFMLKSDJFMLKISDJFM')
   socket.on("connected", function () {
     console.log("verbonden met socket webserver");
     console.log('jisder')
