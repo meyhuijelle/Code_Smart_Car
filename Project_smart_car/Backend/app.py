@@ -1,5 +1,10 @@
+from io import StringIO
+from os import getegid
+import re
 import time
 from RPi import GPIO
+from flask.globals import request
+from flask.wrappers import Request
 from helpers.klasseknop import Button
 import threading
 from serial import Serial, PARITY_NONE
@@ -17,6 +22,8 @@ GPIO.setmode(GPIO.BCM)
 
 # led3 = 21
 knop1 = Button(20)
+
+waardeLDR = 0
 
 # ser = serial.Serial('/dev/ttyS0')
 
@@ -47,33 +54,26 @@ def error_handler(e):
     print(e)
 
 
-# START een thread op. Belangrijk!!! Debugging moet UIT staan op start van de server, anders start de thread dubbel op
-# werk enkel met de packages gevent en gevent-websocket.
-# def get_LDR_data():
-#     while True:
-#         print("LDR haalt data op van de Arduino")
-#         with Serial('/dev/ttyS0', 9600, bytesize=8, parity=PARITY_NONE, stopbits=1) as poort:
-#             teSturen = "LDR"
-#             stuur = teSturen.encode(encoding='UTF-8', errors='strict')
-#             poort.write(str(stuur))
-#             val = poort.readline()
-#         print("De lichtintensiteit van de LDR bedraagt: " + val.rstrip() + " %")
-#         time.sleep(5)
-
 def get_LDR_data():
     while True:
+        global waardeLDR
         print("LDR haalt data op van de Arduino")
-        with Serial('/dev/ttyS0', 9600, bytesize=8, parity=PARITY_NONE, stopbits=1) as poort:
+        with Serial('/dev/serial0', 9600, bytesize=8, parity=PARITY_NONE, stopbits=1) as poort:
             string = "LDR"
-            doorsturen = string.encode(encoding='UTF-8', errors='strict')
-            poort.write(doorsturen)
+            bericht = string.encode(encoding='UTF-8', errors='strict')
+            poort.write(bericht)
             val = poort.readline()
             vall = val.decode()
+            waardeLDR = vall.rstrip()
         print("De lichtintensiteit van de LDR bedraagt: " + vall.rstrip() + " %")
+        # print(vall.rstrip())
+        # return vall.rstrip()
 
 
 thread = threading.Timer(1, get_LDR_data)
 thread.start()
+
+endpoint = '/api/v1'
 
 
 print("**** Program started ****")
@@ -90,30 +90,39 @@ def hallo():
 def initial_connection():
     print('A new client connect')
     # # Send to the client!
-    # vraag de status op van de lam
+    # vraag de status op van de lampen uit de DB
+    # status = DataRepository.read_historiek()
+    # print(status)
+    status = waardeLDR
+    socketio.emit('B2F_verstuur_data', {'data': status}, broadcast=True)
 
 
-# @socketio.on('F2B_switch_light')
-# def switch_light(data):
-#     # Ophalen van de data
-#     lamp_id = data['lamp_id']
-#     new_status = data['new_status']
-#     print(f"Lamp {lamp_id} wordt geswitcht naar {new_status}")
+is_sending = True
 
-#     # Stel de status in op de DB
-#     res = DataRepository.update_status_lamp(lamp_id, new_status)
 
-#     # Vraag de (nieuwe) status op van de lamp en stuur deze naar de frontend.
-#     data = DataRepository.read_status_lamp_by_id(lamp_id)
-#     socketio.emit('B2F_verandering_lamp', {'lamp': data}, broadcast=True)
+def send_data():
+    while is_sending:
+        print("data_versturen")
+        status = waardeLDR
+        socketio.emit('B2F_verstuur_data', {'data': status}, broadcast=True)
+        time.sleep(1)
 
-#     # Indien het om de lamp van de TV kamer gaat, dan moeten we ook de hardware aansturen.
-#     if lamp_id == '3':
-#         print(f"TV kamer moet switchen naar {new_status} !")
-#         GPIO.output(led3, new_status)
+
+dataThread = threading.Timer(1, send_data)
+dataThread.start()
+
+
+@app.route(endpoint + '/historiek', methods=['GET', 'POST'])
+def get_historiek():
+    if request.method == 'GET':
+        return jsonify(historiek=DataRepository.read_historiek()), 200
+    elif request.method == 'POST':
+        gegevens = DataRepository.json_or_formdata(request)
+        nieuwe_historiek = DataRepository.create_historiek(
+            gegevens['DeviceID'], gegevens['ActieID'], gegevens['Actiedatum'], gegevens['Waarde'], gegevens['Commentaar'])
+        return jsonify(historiekID=nieuwe_historiek), 201
+
 
 # # ANDERE FUNCTIES
-
-
 if __name__ == '__main__':
     socketio.run(app, debug=False, host='0.0.0.0')

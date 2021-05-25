@@ -62,11 +62,12 @@ Hier komt de feedforward: wat ga ik concreet doen?
 - [ ] ToDo 1: Ik ga opzoek naar een kleine auto.
 - [ ] ToDo 2: Ik ga uitzoeken hoe ik met een speciale voeding de PI van stroom kan voorzien in mijn auto.
 
-## Gesprek 2 (Datum: dd/mm/yyyy)
+## Gesprek 2 (Datum: 25/05/2020)
 
 Lector:
 
-Vragen voor dit gesprek:
+Vragen voor dit gesprek: Hoe kan ik de datum van nu opvragen?
+Hoe start ik terug van ID 50 voor in de databank?
 
 - [x] vraag 1:
 - [ ] vraag 2:
@@ -80,3 +81,7 @@ Hier komt de feedforward: wat ga ik concreet doen?
 
 - [ ] ToDo 1
 - [ ] ToDo 2
+
+<!-- ## Gesprek 3 (Datum: 26/05/202)
+
+Lector -->
