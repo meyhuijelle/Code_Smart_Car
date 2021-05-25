@@ -1,0 +1,14 @@
+[Unit]
+Description=ProjectOne Project
+After=network.target
+
+[Service]
+ExecStart=/usr/bin/python3 -u /home/student/<naam_van_je_repo>/Code/Backend/app.py
+WorkingDirectory=/home/student/<naam_van_je_repo>/Code/Backend/app.py
+StandardOutput=inherit
+StandardError=inherit
+Restart=always
+User=student
+
+[Install]
+WantedBy=multi-user.target
