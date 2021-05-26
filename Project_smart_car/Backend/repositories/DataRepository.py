@@ -12,7 +12,7 @@ class DataRepository:
 
     @staticmethod
     def read_historiek():
-        sql = "SELECT * FROM devicesdb.historiek"
+        sql = "SELECT * FROM devicesdb.historiek ORDER BY HistoriekID DESC LIMIT 5"
         return Database.get_rows(sql)
 
     @staticmethod

@@ -313,3 +313,7 @@ address,
 figure {
   margin: 0 0 24px;
 } */
+
+table {
+  border: 1 px;
+}
