@@ -144,7 +144,7 @@ figcaption {
 }
 
 hr {
-  border: 0;
+  border: 1;
   height: 0.07px;
   background: white;
   margin: 0 0 24px;
@@ -674,6 +674,12 @@ a:focus {
   margin: 0;
 }
 
+.c-div__layout {
+  margin: -9px ;
+  box-shadow: 0px 3px 7px gray;
+  /* width: 110%; */
+  
+}
 /*------------------------------------*\
   #UTILITIES
 \*------------------------------------*/

@@ -43,23 +43,16 @@ const listenToSocket = function () {
 
   
 
-  socket.on('B2F_verstuur_data', function(jsonObject){
-    let today = new Date();
-    // console.log('Ik ben er')
+  socket.on('B2F_verstuur_data_ldr', function(jsonObject){
+    // let today = new Date();
     console.log(jsonObject)
-    document.querySelector('.js-data').innerHTML = `De lichtsterkte van de LDR is: ${jsonObject.data}%`
-    const object = {
-      DeviceID: 3,
-      ActieID: 2,
-      Actiedatum: '2017-05-31 19:19:09',
-      // Actiedatum: today,
-      Waarde: 33.5,
-      Commentaar: "Dit is voorbeeldcommentaar "
-    }
-    console.log('Dit is het object')
-    console.log(object)
-    handleData(`http://192.168.168.168:5000/api/v1/historiek`, null, null, 'POST', JSON.stringify(object))
+    document.querySelector('.js-lichtsterkte').innerHTML = `De lichtsterkte van de LDR is: ${jsonObject.lichtsterkte}%`
   }) 
+
+  socket.on('B2F_verstuur_data_dallas', function(jsonObject){
+    console.log(jsonObject)
+    document.querySelector('.js-temperatuur').innerHTML = `De temperatuur in de wagen bedraagt: ${jsonObject.temperatuur}`
+  })
 
 };
 

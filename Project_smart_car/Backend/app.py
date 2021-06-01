@@ -8,6 +8,7 @@ from flask.wrappers import Request
 from helpers.klasseknop import Button
 import threading
 from serial import Serial, PARITY_NONE
+import math
 
 
 from flask_cors import CORS
@@ -24,6 +25,10 @@ GPIO.setmode(GPIO.BCM)
 knop1 = Button(20)
 
 waardeLDR = 0
+temperatuur = 0
+
+sensor_file_name = '/sys/bus/w1/devices/28-00000b6cfae9/w1_slave'
+
 
 # ser = serial.Serial('/dev/ttyS0')
 
@@ -54,6 +59,8 @@ def error_handler(e):
     print(e)
 
 
+# ***LDR***
+
 def get_LDR_data():
     while True:
         global waardeLDR
@@ -65,6 +72,8 @@ def get_LDR_data():
             val = poort.readline()
             vall = val.decode()
             waardeLDR = vall.rstrip()
+            DataRepository.create_historiek(
+                3, 2, '2017-05-31 19:19:09', waardeLDR, "Dit is voorbeeldcommentaar ")
         print("De lichtintensiteit van de LDR bedraagt: " + vall.rstrip() + " %")
         # print(vall.rstrip())
         # return vall.rstrip()
@@ -72,6 +81,38 @@ def get_LDR_data():
 
 thread = threading.Timer(1, get_LDR_data)
 thread.start()
+
+# ***LDR***
+
+# ***Temperatuur***
+
+
+def geef_temp():
+    global temperatuur
+    sensor_file = open(sensor_file_name, 'r')
+    for line in sensor_file:
+        lines = str.rstrip(line)  # weghalen van newlines \n.
+        # juiste regel vinden. --> indien niet voorkomt, geeft het -1 terug.
+        res = lines.find('t=')
+        if(res != -1):
+            temperatuur = f"{lines[res+2:res+4]}.{lines[res+5:res+7]} °C"
+    sensor_file.close()
+    return temperatuur
+
+
+def get_temp():
+    while True:
+        print(geef_temp())
+        # print(temperatuur[0:5])
+        DataRepository.create_historiek(
+            7, 3, '2017-05-31 19:19:09', temperatuur[0:5], "Dit is temperatuurdata")
+        time.sleep(1)
+
+
+thread_temp = threading.Timer(1, get_temp)
+thread_temp.start()
+
+# ***Temperatuur***
 
 endpoint = '/api/v1'
 
@@ -89,27 +130,37 @@ def hallo():
 @socketio.on('connect')
 def initial_connection():
     print('A new client connect')
-    # # Send to the client!
-    # vraag de status op van de lampen uit de DB
-    # status = DataRepository.read_historiek()
-    # print(status)
     status = waardeLDR
-    socketio.emit('B2F_verstuur_data', {'data': status}, broadcast=True)
+    socketio.emit('B2F_verstuur_data_ldr', {'data': status}, broadcast=True)
 
 
 is_sending = True
 
 
-def send_data():
+def send_data_ldr():
     while is_sending:
-        print("data_versturen")
+        print('Verstuurd ***LDR*** data')
         status = waardeLDR
-        socketio.emit('B2F_verstuur_data', {'data': status}, broadcast=True)
-        time.sleep(1)
+        socketio.emit('B2F_verstuur_data_ldr', {
+                      'lichtsterkte': status}, broadcast=True)
+        time.sleep(5)
 
 
-dataThread = threading.Timer(1, send_data)
-dataThread.start()
+verstuur_data_ldr_thread = threading.Timer(1, send_data_ldr)
+verstuur_data_ldr_thread.start()
+
+
+def send_data_dallas():
+    while is_sending:
+        print('Verstuurd ***DALLAS*** data')
+        status = temperatuur
+        socketio.emit('B2F_verstuur_data_dallas', {
+                      'temperatuur': status}, broadcast=True)
+        time.sleep(5)
+
+
+verstuurd_data_dallas_thread = threading.Timer(1, send_data_dallas)
+verstuurd_data_dallas_thread.start()
 
 
 @app.route(endpoint + '/historiek', methods=['GET', 'POST'])
