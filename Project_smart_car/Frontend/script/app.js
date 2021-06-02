@@ -1,7 +1,7 @@
 const lanIP = `${window.location.hostname}:5000`;
 const socket = io(`http://${lanIP}`);
 
-let htmlTemp, htmlInfo;
+let htmlTemp, htmlInfo, htmlContact;
 
 
 // const showHistoriek = function(jsonObject){
@@ -33,34 +33,81 @@ const getHistoriek = function(){
   handleData(`http://192.168.168.168:5000/api/v1/historiek`, showHistoriek)
 }
 
-const listenToClicksIndex = function () {
-  if(htmlTemp){
-    const homeButton = document.querySelector('.js-homeButton');
-    homeButton.addEventListener('click', function(){
-      console.log('Back to home screen!')
-      window.location.href = 'index.html'
-    })
+const listenToUI = function () {
+  // if(htmlTemp){
+  //   const homeButton = document.querySelector('.js-homeButton');
+  //   homeButton.addEventListener('click', function(){
+  //     console.log('Back to home screen!')
+  //     window.location.href = 'index.html'
+  //   })
 
-    const Infobutton = document.querySelector('.js-buttonInfo');
-    Infobutton.addEventListener('click', function(){
-    console.log('***info*** button pushed!')
-    window.location.href = 'info.html'
-  })
+  //   const infoButton = document.querySelector('.js-buttonInfo');
+  //   infoButton.addEventListener('click', function(){
+  //   console.log('***info*** button pushed!')
+  //   window.location.href = 'info.html'
+  // })
+  // const contactButton = document.querySelector('.js-buttonContact');
+  // contactButton.addEventListener('click', function(){
+  //   console.log('***contact*** button pushed!')
+  //   window.location.href = 'contact.html'
+  // })
   
-  }
-  if(htmlInfo){
+  // }
+  // if(htmlInfo){
+  // const homeButton = document.querySelector('.js-homeButton');
+  // homeButton.addEventListener('click', function(){
+  //   console.log('Back to home screen!')
+  //   window.location.href = 'index.html'
+  // })
+  // const infoButton = document.querySelector('.js-buttonInfo');
+  // infoButton.addEventListener('click', function(){
+  //   console.log('***info*** button pushed!')
+  //   window.location.href = 'info.html'
+  // })
+  // const contactButton = document.querySelector('.js-buttonContact');
+  // contactButton.addEventListener('click', function(){
+  //   console.log('***contact*** button pushed!')
+  //   window.location.href = 'contact.html'
+  // })
+  // } 
+
+  // if(htmlContact){
+  // const homeButton = document.querySelector('.js-homeButton');
+  // homeButton.addEventListener('click', function(){
+  //   console.log('Back to home screen!')
+  //   window.location.href = 'index.html'
+  // })
+  // const infoButton = document.querySelector('.js-buttonInfo');
+  // infoButton.addEventListener('click', function(){
+  //   console.log('***info*** button pushed!')
+  //   window.location.href = 'info.html'
+  // })
+
+  // const contactButton = document.querySelector('.js-buttonContact');
+  // contactButton.addEventListener('click', function(){
+  //   console.log('***contact*** button pushed!')
+  //   window.location.href = 'contact.html'
+  // })
+  
   const homeButton = document.querySelector('.js-homeButton');
   homeButton.addEventListener('click', function(){
     console.log('Back to home screen!')
     window.location.href = 'index.html'
   })
-  const Infobutton = document.querySelector('.js-buttonInfo');
-  Infobutton.addEventListener('click', function(){
+  const infoButton = document.querySelector('.js-buttonInfo');
+  infoButton.addEventListener('click', function(){
     console.log('***info*** button pushed!')
     window.location.href = 'info.html'
   })
+  const contactButton = document.querySelector('.js-buttonContact');
+  contactButton.addEventListener('click', function(){
+    console.log('***contact*** button pushed!')
+    window.location.href = 'contact.html'
+  })
   } 
-};
+
+  
+
 
 const listenToSocket = function () {
   if(htmlTemp){
@@ -85,6 +132,7 @@ const listenToSocket = function () {
 const init = function(){
   htmlTemp = document.querySelector('.js-temperature')
   htmlInfo = document.querySelector('.js-info')
+  htmlContact = document.querySelector('.js-contact')
 
   // console.log('DOM geladen')
   // if(htmlTemp){
@@ -94,8 +142,8 @@ const init = function(){
   //   // listenToClicksInfo();
   //   console.log('jajajajaj')
   // }
-  listenToClicksIndex();
-  // listenToUI();
+  // listenToClicksIndex();
+  listenToUI();
   listenToSocket();
 }
 
