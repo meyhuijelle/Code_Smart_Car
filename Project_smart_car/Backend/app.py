@@ -61,7 +61,7 @@ def error_handler(e):
 
 # ***LDR***
 
-def get_LDR_data():
+def get_data():
     while True:
         global waardeLDR
         print("LDR haalt data op van de Arduino")
@@ -75,11 +75,17 @@ def get_LDR_data():
             DataRepository.create_historiek(
                 3, 2, '2017-05-31 19:19:09', waardeLDR, "Dit is voorbeeldcommentaar ")
         print("De lichtintensiteit van de LDR bedraagt: " + vall.rstrip() + " %")
+
+        print(geef_temp())
+        # print(temperatuur[0:5])
+        DataRepository.create_historiek(
+            7, 3, '2017-05-31 19:19:09', temperatuur[0:5], "Dit is temperatuurdata")
+        time.sleep(1)
         # print(vall.rstrip())
         # return vall.rstrip()
 
 
-thread = threading.Timer(1, get_LDR_data)
+thread = threading.Timer(1, get_data)
 thread.start()
 
 # ***LDR***
@@ -100,17 +106,17 @@ def geef_temp():
     return temperatuur
 
 
-def get_temp():
-    while True:
-        print(geef_temp())
-        # print(temperatuur[0:5])
-        DataRepository.create_historiek(
-            7, 3, '2017-05-31 19:19:09', temperatuur[0:5], "Dit is temperatuurdata")
-        time.sleep(1)
+# def get_temp():
+#     while True:
+#         print(geef_temp())
+#         # print(temperatuur[0:5])
+#         DataRepository.create_historiek(
+#             7, 3, '2017-05-31 19:19:09', temperatuur[0:5], "Dit is temperatuurdata")
+#         time.sleep(1)
 
 
-thread_temp = threading.Timer(1, get_temp)
-thread_temp.start()
+# thread_temp = threading.Timer(1, get_temp)
+# thread_temp.start()
 
 # ***Temperatuur***
 
@@ -137,30 +143,36 @@ def initial_connection():
 is_sending = True
 
 
-def send_data_ldr():
+def send_data():
     while is_sending:
         print('Verstuurd ***LDR*** data')
         status = waardeLDR
         socketio.emit('B2F_verstuur_data_ldr', {
                       'lichtsterkte': status}, broadcast=True)
-        time.sleep(5)
 
-
-verstuur_data_ldr_thread = threading.Timer(1, send_data_ldr)
-verstuur_data_ldr_thread.start()
-
-
-def send_data_dallas():
-    while is_sending:
         print('Verstuurd ***DALLAS*** data')
         status = temperatuur
         socketio.emit('B2F_verstuur_data_dallas', {
                       'temperatuur': status}, broadcast=True)
+
         time.sleep(5)
 
 
-verstuurd_data_dallas_thread = threading.Timer(1, send_data_dallas)
-verstuurd_data_dallas_thread.start()
+verstuur_data_ldr_thread = threading.Timer(1, send_data)
+verstuur_data_ldr_thread.start()
+
+
+# def send_data_dallas():
+#     while is_sending:
+#         print('Verstuurd ***DALLAS*** data')
+#         status = temperatuur
+#         socketio.emit('B2F_verstuur_data_dallas', {
+#                       'temperatuur': status}, broadcast=True)
+#         time.sleep(5)
+
+
+# verstuurd_data_dallas_thread = threading.Timer(1, send_data_dallas)
+# verstuurd_data_dallas_thread.start()
 
 
 @app.route(endpoint + '/historiek', methods=['GET', 'POST'])

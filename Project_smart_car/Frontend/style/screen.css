@@ -968,11 +968,13 @@ a:focus {
 }
 
 .c-more-important__content{
-  border: 0.3px solid black;
+  /* border: 0.3px solid black; */
   padding: 8px;
   border-radius: 15px;
   background-color: white;
-  box-shadow: 0 10px 20px rgba(0,0,0,0.10);
+  /* box-shadow: 0 10px 20px rgba(0,0,0,0.10); */
+  margin-top: -10px
+  /* align-self: center; */
 }
 
 .c-border{
