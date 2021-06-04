@@ -93,7 +93,7 @@ def get_data_serieel():
         #     7, 3, '2017-05-31 19:19:09', temperatuur[0:5], "Dit is temperatuurdata")
 
         # print(vall.rstrip())
-        # return vall.rstrip()
+        # # return vall.rstrip()
 
         print("JSN haalt data op van de Arduino")
         with Serial('/dev/serial0', 9600, bytesize=8, parity=PARITY_NONE, stopbits=1) as poort:
@@ -113,7 +113,7 @@ def get_data_serieel():
         time.sleep(0.005)
 
 
-thread = threading.Timer(0.05, get_data_serieel)
+thread = threading.Timer(0.005, get_data_serieel)
 thread.start()
 
 
@@ -131,13 +131,36 @@ thread_niet_serieel.start()
 def buzzer():
     buzzer = GPIO.PWM(triggerPIN, 100)
     while True:
-        if (int(waardeAfstand) < 30):
+        if (int(waardeAfstand) == -1):
+            buzzer.stop()
+        elif(int(waardeAfstand) == 0):
             buzzer.start(10)
             time.sleep(0.05)
             buzzer.ChangeFrequency(100)
             # time.sleep(0.5)
             buzzer.stop()
             time.sleep(0.05)
+        elif (int(waardeAfstand) <= 30):
+            buzzer.start(10)
+            time.sleep(0.1)
+            buzzer.ChangeFrequency(100)
+            # time.sleep(0.5)
+            buzzer.stop()
+            time.sleep(0.1)
+        elif (int(waardeAfstand) <= 50):
+            buzzer.start(10)
+            time.sleep(0.15)
+            buzzer.ChangeFrequency(100)
+            # time.sleep(0.5)
+            buzzer.stop()
+            time.sleep(0.15)
+        elif (int(waardeAfstand) > 50):
+            buzzer.start(10)
+            time.sleep(0.20)
+            buzzer.ChangeFrequency(100)
+            # time.sleep(0.5)
+            buzzer.stop()
+            time.sleep(0.20)
 
 
 thread_buzzer = threading.Timer(1, buzzer)
