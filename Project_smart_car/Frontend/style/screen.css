@@ -4,7 +4,7 @@
   #FONTS
 \*------------------------------------*/
 
-@font-face {
+/* @font-face {
   font-family: 'generalSans Web';
   font-weight: 400;
   src: url('../fonts/GeneralSans-Regular.woff2') format('woff2'), url('../fonts/GeneralSans-Regular.woff') format('woff');
@@ -14,7 +14,7 @@
   font-family: 'generalSans Web';
   font-weight: 600;
   src: url('../fonts/GeneralSans-Medium.woff2') format('woff2'), url('../fonts/GeneralSans-Medium.woff') format('woff');
-}
+} */
 
 /*------------------------------------*\
   #GENERIC
@@ -29,8 +29,8 @@
 html {
   font-size: 18px;
   line-height: 1.5;
-  /* font-family: 'Helvetica Neue', Helvetica, arial, sans-serif; */
-  font-family: 'generalSans Web', 'Helvetica Neue', Helvetica, arial, sans-serif;
+  font-family: 'Helvetica Neue', Helvetica, arial, sans-serif;
+  /* font-family: 'generalSans Web', 'Helvetica Neue', Helvetica, arial, sans-serif; */
   color: #241c15;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;

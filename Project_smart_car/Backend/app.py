@@ -9,6 +9,7 @@ from helpers.klasseknop import Button
 import threading
 from serial import Serial, PARITY_NONE
 import math
+import sys
 
 
 from flask_cors import CORS
@@ -17,15 +18,24 @@ from flask import Flask, jsonify
 from repositories.DataRepository import DataRepository
 
 
-# Code voor Hardware
-GPIO.setwarnings(False)
-GPIO.setmode(GPIO.BCM)
-
 # led3 = 21
 knop1 = Button(20)
 
 waardeLDR = 0
 temperatuur = 0
+waardeAfstand = 0
+
+triggerPIN = 22
+
+# Code voor Hardware
+GPIO.setwarnings(False)
+GPIO.setmode(GPIO.BCM)
+GPIO.setup(triggerPIN, GPIO.OUT)
+
+# buzzer = GPIO.PWM(triggerPIN, 1000)
+# buzzer.start(10)
+# buzzer.stop
+
 
 sensor_file_name = '/sys/bus/w1/devices/28-00000b6cfae9/w1_slave'
 
@@ -61,9 +71,10 @@ def error_handler(e):
 
 # ***LDR***
 
-def get_data():
+def get_data_serieel():
     while True:
         global waardeLDR
+        global waardeAfstand
         print("LDR haalt data op van de Arduino")
         with Serial('/dev/serial0', 9600, bytesize=8, parity=PARITY_NONE, stopbits=1) as poort:
             string = "LDR"
@@ -76,17 +87,81 @@ def get_data():
                 3, 2, '2017-05-31 19:19:09', waardeLDR, "Dit is voorbeeldcommentaar ")
         print("De lichtintensiteit van de LDR bedraagt: " + vall.rstrip() + " %")
 
-        print(geef_temp())
-        # print(temperatuur[0:5])
-        DataRepository.create_historiek(
-            7, 3, '2017-05-31 19:19:09', temperatuur[0:5], "Dit is temperatuurdata")
-        time.sleep(1)
+        # print(geef_temp())
+        # # print(temperatuur[0:5])
+        # DataRepository.create_historiek(
+        #     7, 3, '2017-05-31 19:19:09', temperatuur[0:5], "Dit is temperatuurdata")
+
         # print(vall.rstrip())
         # return vall.rstrip()
 
+        print("JSN haalt data op van de Arduino")
+        with Serial('/dev/serial0', 9600, bytesize=8, parity=PARITY_NONE, stopbits=1) as poort:
+            string = "JSN"
+            bericht = string.encode(encoding='UTF-8', errors='strict')
+            poort.write(bericht)
+            val = poort.readline()
+            vall = val.decode()
+            waardeAfstand = vall.rstrip()
+            # waardeAfstand = int(waardeAfstand)
+            # DataRepository.create_historiek(
+            #     3, 2, '2017-05-31 19:19:09', waardeLDR, "Dit is voorbeeldcommentaar ")
+        print("Distance " + vall.rstrip() + " CM")
 
-thread = threading.Timer(1, get_data)
+        print("afstannnnd " + waardeAfstand)
+
+        time.sleep(0.005)
+
+
+thread = threading.Timer(0.05, get_data_serieel)
 thread.start()
+
+
+def get_data_niet_serieel():
+    print(geef_temp())
+    # print(temperatuur[0:5])
+    DataRepository.create_historiek(
+        7, 3, '2017-05-31 19:19:09', temperatuur[0:5], "Dit is temperatuurdata")
+
+
+thread_niet_serieel = threading.Timer(1, get_data_niet_serieel)
+thread_niet_serieel.start()
+
+
+def buzzer():
+    buzzer = GPIO.PWM(triggerPIN, 100)
+    while True:
+        if (int(waardeAfstand) < 30):
+            buzzer.start(10)
+            time.sleep(0.05)
+            buzzer.ChangeFrequency(100)
+            # time.sleep(0.5)
+            buzzer.stop()
+            time.sleep(0.05)
+
+
+thread_buzzer = threading.Timer(1, buzzer)
+thread_buzzer.start()
+
+# def get_data_JSN():
+#     while True:
+#         global waardeAfstand
+#         print("JSN haalt data op van de Arduino")
+#         with Serial('/dev/serial0', 9600, bytesize=8, parity=PARITY_NONE, stopbits=1) as poort:
+#             string = "JSN"
+#             bericht = string.encode(encoding='UTF-8', errors='strict')
+#             poort.write(bericht)
+#             val = poort.readline()
+#             vall = val.decode()
+#             waardeLDR = vall.rstrip()
+#             # DataRepository.create_historiek(
+#             #     3, 2, '2017-05-31 19:19:09', waardeLDR, "Dit is voorbeeldcommentaar ")
+#         print("Distance " + vall.rstrip() + " CM")
+#         time.sleep(0.5)
+
+
+# thread_JSN = threading.Timer(1, get_data_JSN)
+# thread_JSN.start()
 
 # ***LDR***
 
@@ -128,12 +203,12 @@ print("**** Program started ****")
 # API ENDPOINTS
 
 
-@app.route('/')
+@ app.route('/')
 def hallo():
     return "Server is running, er zijn momenteel geen API endpoints beschikbaar."
 
 
-@socketio.on('connect')
+@ socketio.on('connect')
 def initial_connection():
     print('A new client connect')
     status = waardeLDR
@@ -175,7 +250,7 @@ verstuur_data_ldr_thread.start()
 # verstuurd_data_dallas_thread.start()
 
 
-@app.route(endpoint + '/historiek', methods=['GET', 'POST'])
+@ app.route(endpoint + '/historiek', methods=['GET', 'POST'])
 def get_historiek():
     if request.method == 'GET':
         return jsonify(historiek=DataRepository.read_historiek()), 200
