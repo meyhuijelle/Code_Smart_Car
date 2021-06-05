@@ -23,7 +23,10 @@ knop1 = Button(20)
 
 waardeLDR = 0
 temperatuur = 0
-waardeAfstand = 0
+waardeAfstand1 = 0
+waardeAfstand2 = 0
+waardeAfstand3 = 0
+waardeAfstand4 = 0
 
 triggerPIN = 22
 
@@ -31,6 +34,9 @@ triggerPIN = 22
 GPIO.setwarnings(False)
 GPIO.setmode(GPIO.BCM)
 GPIO.setup(triggerPIN, GPIO.OUT)
+
+buzzer = GPIO.PWM(triggerPIN, 100)
+buzzer.stop()
 
 # buzzer = GPIO.PWM(triggerPIN, 1000)
 # buzzer.start(10)
@@ -74,41 +80,43 @@ def error_handler(e):
 def get_data_serieel():
     while True:
         global waardeLDR
-        global waardeAfstand
+        global waardeAfstand1
+        global waardeAfstand2
+        global waardeAfstand3
+        global waardeAfstand4
         print("LDR haalt data op van de Arduino")
         with Serial('/dev/serial0', 9600, bytesize=8, parity=PARITY_NONE, stopbits=1) as poort:
-            string = "LDR"
+            string = "DATA"
             bericht = string.encode(encoding='UTF-8', errors='strict')
             poort.write(bericht)
             val = poort.readline()
             vall = val.decode()
-            waardeLDR = vall.rstrip()
-            DataRepository.create_historiek(
-                3, 2, '2017-05-31 19:19:09', waardeLDR, "Dit is voorbeeldcommentaar ")
-        print("De lichtintensiteit van de LDR bedraagt: " + vall.rstrip() + " %")
+            # waardeLDR = vall.rstrip()
 
-        # print(geef_temp())
-        # # print(temperatuur[0:5])
-        # DataRepository.create_historiek(
-        #     7, 3, '2017-05-31 19:19:09', temperatuur[0:5], "Dit is temperatuurdata")
+        # print("De lichtintensiteit van de LDR bedraagt: " + vall.rstrip() + " %")
 
-        # print(vall.rstrip())
-        # # return vall.rstrip()
+        data_arduino = vall.rstrip().split("/")
+        waardeLDR = data_arduino[0]
+        waardeAfstand1 = data_arduino[1]
+        waardeAfstand2 = data_arduino[2]
+        waardeAfstand3 = data_arduino[3]
+        waardeAfstand4 = data_arduino[4]
 
-        print("JSN haalt data op van de Arduino")
-        with Serial('/dev/serial0', 9600, bytesize=8, parity=PARITY_NONE, stopbits=1) as poort:
-            string = "JSN"
-            bericht = string.encode(encoding='UTF-8', errors='strict')
-            poort.write(bericht)
-            val = poort.readline()
-            vall = val.decode()
-            waardeAfstand = vall.rstrip()
-            # waardeAfstand = int(waardeAfstand)
-            # DataRepository.create_historiek(
-            #     3, 2, '2017-05-31 19:19:09', waardeLDR, "Dit is voorbeeldcommentaar ")
-        print("Distance " + vall.rstrip() + " CM")
+        print(waardeLDR)
+        print(waardeAfstand1)
+        print(waardeAfstand2)
+        print(waardeAfstand3)
+        print(waardeAfstand4)
+        # time.sleep(1)
 
-        print("afstannnnd " + waardeAfstand)
+        print(geef_temp())
+        # print(temperatuur[0:5])
+
+        DataRepository.create_historiek(
+            3, 2, '2017-05-31 19:19:09', waardeLDR, "Dit is voorbeeldcommentaar ")
+
+        DataRepository.create_historiek(
+            7, 3, '2017-05-31 19:19:09', temperatuur[0:5], "Dit is temperatuurdata")
 
         time.sleep(0.005)
 
@@ -117,54 +125,133 @@ thread = threading.Timer(0.005, get_data_serieel)
 thread.start()
 
 
-def get_data_niet_serieel():
-    print(geef_temp())
-    # print(temperatuur[0:5])
-    DataRepository.create_historiek(
-        7, 3, '2017-05-31 19:19:09', temperatuur[0:5], "Dit is temperatuurdata")
+# def get_data_niet_serieel():
+#     print(geef_temp())
+#     # print(temperatuur[0:5])
+#     DataRepository.create_historiek(
+#         7, 3, '2017-05-31 19:19:09', temperatuur[0:5], "Dit is temperatuurdata")
 
 
-thread_niet_serieel = threading.Timer(1, get_data_niet_serieel)
-thread_niet_serieel.start()
+# thread_niet_serieel = threading.Timer(0.005, get_data_niet_serieel)
+# thread_niet_serieel.start()
 
 
-def buzzer():
-    buzzer = GPIO.PWM(triggerPIN, 100)
+def buzzer1():
+    # buzzer = GPIO.PWM(triggerPIN, 100)
     while True:
-        if (int(waardeAfstand) == -1):
+        if (int(waardeAfstand1) == -1 and int(waardeAfstand2) == -1 and int(waardeAfstand3) == -1 and int(waardeAfstand4) == -1):
             buzzer.stop()
-        elif(int(waardeAfstand) == 0):
+        elif(int(waardeAfstand1) == 0 or int(waardeAfstand2) == 0 or int(waardeAfstand3) == 0 or int(waardeAfstand4) == 0):
             buzzer.start(10)
             time.sleep(0.05)
             buzzer.ChangeFrequency(100)
             # time.sleep(0.5)
             buzzer.stop()
             time.sleep(0.05)
-        elif (int(waardeAfstand) <= 30):
+            # print("11111111111111111111111111111111111111111111111111111111111111111")
+
+        elif (int(waardeAfstand1) > 0 and int(waardeAfstand1) <= 30 or int(waardeAfstand2) > 0 and int(waardeAfstand2) <= 30 or int(waardeAfstand3) > 0 and int(waardeAfstand3) <= 30 or int(waardeAfstand4) > 0 and int(waardeAfstand4) <= 30):
             buzzer.start(10)
             time.sleep(0.1)
             buzzer.ChangeFrequency(100)
             # time.sleep(0.5)
             buzzer.stop()
             time.sleep(0.1)
-        elif (int(waardeAfstand) <= 50):
+            # print("222222222222222222222222222222222222222222222222222222222222222")
+
+        elif (int(waardeAfstand1) > 0 and int(waardeAfstand1) <= 50 or int(waardeAfstand2) > 0 and int(waardeAfstand2) <= 50 or int(waardeAfstand3) > 0 and int(waardeAfstand3) <= 50 or int(waardeAfstand4) > 0 and int(waardeAfstand4) <= 50):
             buzzer.start(10)
             time.sleep(0.15)
             buzzer.ChangeFrequency(100)
             # time.sleep(0.5)
             buzzer.stop()
             time.sleep(0.15)
-        elif (int(waardeAfstand) > 50):
+            # print(
+            #     "33333333333333333333333333333333333333333333333333333333333333333333333333333")
+        elif (int(waardeAfstand1) > 50 or int(waardeAfstand2) > 50 or int(waardeAfstand3) > 50 or int(waardeAfstand4) > 50):
             buzzer.start(10)
             time.sleep(0.20)
             buzzer.ChangeFrequency(100)
             # time.sleep(0.5)
             buzzer.stop()
             time.sleep(0.20)
+            # print(
+            #     "444444444444444444444444444444444444444444444444444444444444444444444444444")
 
 
-thread_buzzer = threading.Timer(1, buzzer)
-thread_buzzer.start()
+thread_buzzer1 = threading.Timer(1, buzzer1)
+thread_buzzer1.start()
+
+# def buzzer1():
+#     # buzzer = GPIO.PWM(triggerPIN, 100)
+#     while True:
+#         if (int(waardeAfstand1) == -1):
+#             buzzer.stop()
+#         elif(int(waardeAfstand1) == 0):
+#             buzzer.start(10)
+#             time.sleep(0.05)
+#             buzzer.ChangeFrequency(100)
+#             # time.sleep(0.5)
+#             buzzer.stop()
+#             time.sleep(0.05)
+#         elif (int(waardeAfstand1) <= 30):
+#             buzzer.start(10)
+#             time.sleep(0.1)
+#             buzzer.ChangeFrequency(100)
+#             # time.sleep(0.5)
+#             buzzer.stop()
+#             time.sleep(0.1)
+#         elif (int(waardeAfstand1) <= 50):
+#             buzzer.start(10)
+#             time.sleep(0.15)
+#             buzzer.ChangeFrequency(100)
+#             # time.sleep(0.5)
+#             buzzer.stop()
+#             time.sleep(0.15)
+
+
+# thread_buzzer1 = threading.Timer(1, buzzer1)
+# thread_buzzer1.start()
+
+
+# def buzzer2():
+#     # buzzer = GPIO.PWM(triggerPIN, 100)
+#     while True:
+#         if (int(waardeAfstand2) == -1):
+#             buzzer.stop()
+#         elif(int(waardeAfstand2) == 0):
+#             buzzer.start(10)
+#             time.sleep(0.05)
+#             buzzer.ChangeFrequency(100)
+#             # time.sleep(0.5)
+#             buzzer.stop()
+#             time.sleep(0.05)
+#         elif (int(waardeAfstand2) <= 30):
+#             buzzer.start(10)
+#             time.sleep(0.1)
+#             buzzer.ChangeFrequency(100)
+#             # time.sleep(0.5)
+#             buzzer.stop()
+#             time.sleep(0.1)
+#         elif (int(waardeAfstand2) <= 50):
+#             buzzer.start(10)
+#             time.sleep(0.15)
+#             buzzer.ChangeFrequency(100)
+#             # time.sleep(0.5)
+#             buzzer.stop()
+#             time.sleep(0.15)
+#         elif (int(waardeAfstand2) > 50):
+#             buzzer.start(10)
+#             time.sleep(0.20)
+#             buzzer.ChangeFrequency(100)
+#             # time.sleep(0.5)
+#             buzzer.stop()
+#             time.sleep(0.20)
+
+
+# thread_buzzer2 = threading.Timer(1, buzzer2)
+# thread_buzzer2.start()
+
 
 # def get_data_JSN():
 #     while True:
