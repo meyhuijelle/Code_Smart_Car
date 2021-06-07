@@ -65,7 +65,7 @@ def switch_state_lights(btn):
 GPIO.add_event_detect(button, GPIO.RISING,
                       callback=switch_state_lights, bouncetime=200)
 
-poort = Serial('/dev/serial0', 38400, bytesize=8,
+poort = Serial('/dev/serial0', 9600, bytesize=8,
                parity=PARITY_NONE, stopbits=1)
 
 
@@ -99,7 +99,7 @@ def get_data_serieel():
         global waardeSpeedSensor
         print("LDR haalt data op van de Arduino")
 
-        string = "D"
+        string = "DATA"
         bericht = string.encode(encoding='UTF-8', errors='strict')
         poort.write(bericht)
         val = poort.readline()
@@ -110,22 +110,23 @@ def get_data_serieel():
 
         data_arduino = vall.rstrip().split("/")
         waardeLDR = data_arduino[0]
-        waardeSpeedSensor = data_arduino[1]
-        waardeAfstand1 = data_arduino[2]
-        waardeAfstand2 = data_arduino[3]
-        waardeAfstand3 = data_arduino[4]
-        waardeAfstand4 = data_arduino[5]
+        # waardeSpeedSensor = data_arduino[1]
+        waardeAfstand1 = data_arduino[1]
+        waardeAfstand2 = data_arduino[2]
+        waardeAfstand3 = data_arduino[3]
+        waardeAfstand4 = data_arduino[4]
 
-        print(waardeLDR)
-        print(waardeSpeedSensor + "KM/H")
-        print(waardeAfstand1)
-        print(waardeAfstand2)
-        print(waardeAfstand3)
-        print(waardeAfstand4)
+        print(f"{waardeLDR} %")
+        # print(waardeSpeedSensor + "KM/H")
+        print(f"{waardeAfstand1} cm")
+        print(f"{waardeAfstand2} cm")
+        print(f"{waardeAfstand3} cm")
+        print(f"{waardeAfstand4} cm")
+
         # time.sleep(1)
 
         print(geef_temp())
-        print(temperatuur[0:5])
+        # print(temperatuur[0:5])
 
         DataRepository.create_historiek(
             3, 2, '2017-05-31 19:19:09', waardeLDR, "Dit is voorbeeldcommentaar ")
@@ -248,35 +249,35 @@ verstuur_data_ldr_thread = threading.Timer(1, send_data)
 verstuur_data_ldr_thread.start()
 
 
-def send_data_fast():
-    while is_sending:
-        print('Verstuurd ***JSN1*** data')
-        status = waardeAfstand1
-        socketio.emit('B2F_verstuur_data_JSN1', {
-                      'AfstandJSN1': status}, broadcast=True)
-        print('Verstuurd ***JSN2*** data')
-        status = waardeAfstand2
-        socketio.emit('B2F_verstuur_data_JSN2', {
-                      'AfstandJSN2': status}, broadcast=True)
-        print('Verstuurd ***JSN3*** data')
-        status = waardeAfstand3
-        socketio.emit('B2F_verstuur_data_JSN3', {
-                      'AfstandJSN3': status}, broadcast=True)
-        print('Verstuurd ***JSN4*** data')
-        status = waardeAfstand4
-        socketio.emit('B2F_verstuur_data_JSN4', {
-                      'AfstandJSN4': status}, broadcast=True)
+# def send_data_fast():
+#     while is_sending:
+#         print('Verstuurd ***JSN1*** data')
+#         status = waardeAfstand1
+#         socketio.emit('B2F_verstuur_data_JSN1', {
+#                       'AfstandJSN1': status}, broadcast=True)
+#         print('Verstuurd ***JSN2*** data')
+#         status = waardeAfstand2
+#         socketio.emit('B2F_verstuur_data_JSN2', {
+#                       'AfstandJSN2': status}, broadcast=True)
+#         print('Verstuurd ***JSN3*** data')
+#         status = waardeAfstand3
+#         socketio.emit('B2F_verstuur_data_JSN3', {
+#                       'AfstandJSN3': status}, broadcast=True)
+#         print('Verstuurd ***JSN4*** data')
+#         status = waardeAfstand4
+#         socketio.emit('B2F_verstuur_data_JSN4', {
+#                       'AfstandJSN4': status}, broadcast=True)
 
-        print('Verstuurd ***SPEED*** data')
-        status = waardeSpeedSensor
-        socketio.emit('B2F_verstuur_data_speed', {
-                      'speed': status}, broadcast=True)
+#         print('Verstuurd ***SPEED*** data')
+#         status = waardeSpeedSensor
+#         socketio.emit('B2F_verstuur_data_speed', {
+#                       'speed': status}, broadcast=True)
 
-        time.sleep(0.5)
+#         time.sleep(0.5)
 
 
-send_data_fast_thread = threading.Timer(0.5, send_data_fast)
-send_data_fast_thread.start()
+# send_data_fast_thread = threading.Timer(0.5, send_data_fast)
+# send_data_fast_thread.start()
 
 
 @ app.route(endpoint + '/historiek', methods=['GET', 'POST'])

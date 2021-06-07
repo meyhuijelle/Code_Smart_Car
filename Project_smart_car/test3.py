@@ -36,6 +36,7 @@ def RPM_TO_KMH(value_RPM):
 
 
 def get_rpm(c):
+    start_timer = int(round(time.time() * 1000))
     # print("benner")
     global count  # delcear the count variable global so we can edit it
     global KMH
@@ -50,21 +51,38 @@ def get_rpm(c):
 
     # print(count)
 
-    starteeee = time.time()*1000
-    # print("start")
-    # print(starteeee)
-    einde = starteeee + 1000.0
-    while (time.time()*1000 < einde):
-        #     steps = steps + 1
-        # if(GPIO.input(sensor)):
-        steps = steps + 1
+    starteeee = start_timer
+    print(starteeee)
+    eindTijd = starteeee + 1000
 
-    # print(steps)
+    now = int(round(time.time() * 1000))
+    print(now)
+
+    print(now - (starteeee + 1000))
+
+    while(now < eindTijd):
+        steps = steps + 1
 
     temp = steps - steps_old
     steps_old = steps
-    rps = (temp/20)
-    print(RPM_TO_KMH(rps*60))
+    # rps = (temp/20)
+    print(temp)
+
+    # print(f"Verschil  {starteeee - now}")
+    # print("start")
+    # print(starteeee)
+    # einde = starteeee + 1000.0
+    # while (start_timer < einde):
+    #     #     steps = steps + 1
+    #     # if(GPIO.input(sensor)):
+    #     steps = steps + 1
+
+    # print(steps)
+
+    # temp = steps - steps_old
+    # steps_old = steps
+    # rps = (temp/20)
+    # print(RPM_TO_KMH(rps*60))
 
     # print("einde")
     # print(einde)
