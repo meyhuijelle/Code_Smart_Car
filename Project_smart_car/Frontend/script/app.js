@@ -125,6 +125,31 @@ const listenToSocket = function () {
       console.log(jsonObject)
       document.querySelector('.js-temperature').innerHTML = `${jsonObject.temperatuur}`
     })
+
+    socket.on('B2F_verstuur_data_JSN1', function(jsonObject){
+      console.log(jsonObject)
+      document.querySelector('.js-disSens1').innerHTML = `${jsonObject.AfstandJSN1}`
+    })
+
+    socket.on('B2F_verstuur_data_JSN2', function(jsonObject){
+      console.log(jsonObject)
+      document.querySelector('.js-disSens2').innerHTML = `${jsonObject.AfstandJSN2}`
+    })
+
+    socket.on('B2F_verstuur_data_JSN3', function(jsonObject){
+      console.log(jsonObject)
+      document.querySelector('.js-disSens3').innerHTML = `${jsonObject.AfstandJSN3}`
+    })
+
+    socket.on('B2F_verstuur_data_JSN4', function(jsonObject){
+      console.log(jsonObject)
+      document.querySelector('.js-disSens4').innerHTML = `${jsonObject.AfstandJSN4}`
+    })
+
+    socket.on('B2F_verstuur_data_speed', function(jsonObject){
+      console.log(jsonObject)
+      document.querySelector('.js-speed').innerHTML = `${jsonObject.speed} km/h`
+    })
   }
  
 };

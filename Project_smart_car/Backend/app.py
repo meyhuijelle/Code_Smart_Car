@@ -28,7 +28,18 @@ waardeAfstand2 = 0
 waardeAfstand3 = 0
 waardeAfstand4 = 0
 
+waardeSpeedSensor = 0
+
 triggerPIN = 22
+button = 17
+# LED1 = 5
+# LED2 = 6
+LEDs = [5, 6]
+
+# state_LED1 = False
+# state_LED2 = False
+state_LEDs = False
+
 
 # Code voor Hardware
 GPIO.setwarnings(False)
@@ -38,27 +49,27 @@ GPIO.setup(triggerPIN, GPIO.OUT)
 buzzer = GPIO.PWM(triggerPIN, 100)
 buzzer.stop()
 
-# buzzer = GPIO.PWM(triggerPIN, 1000)
-# buzzer.start(10)
-# buzzer.stop
+GPIO.setup(button, GPIO.IN, pull_up_down=GPIO.PUD_UP)
+GPIO.setup(LEDs, GPIO.OUT)
+
+
+def switch_state_lights(btn):
+    global state_LEDs
+    # global state_LED2
+    state_LEDs = not state_LEDs
+    # state_LED2 = not state_LED2
+    print(state_LEDs)
+    # print(state_LED2)
+
+
+GPIO.add_event_detect(button, GPIO.RISING,
+                      callback=switch_state_lights, bouncetime=200)
+
+poort = Serial('/dev/serial0', 38400, bytesize=8,
+               parity=PARITY_NONE, stopbits=1)
 
 
 sensor_file_name = '/sys/bus/w1/devices/28-00000b6cfae9/w1_slave'
-
-
-# ser = serial.Serial('/dev/ttyS0')
-
-# GPIO.setup(led3, GPIO.OUT)
-# GPIO.output(led3, GPIO.LOW)
-
-
-def lees_knop(pin):
-    if knop1.pressed:
-        print("**** button pressed ****")
-
-
-knop1.on_press(lees_knop)
-
 
 # Code voor Flask
 
@@ -74,35 +85,39 @@ CORS(app)
 def error_handler(e):
     print(e)
 
+# ***DATA***
 
-# ***LDR***
 
 def get_data_serieel():
     while True:
+        global poort
         global waardeLDR
         global waardeAfstand1
         global waardeAfstand2
         global waardeAfstand3
         global waardeAfstand4
+        global waardeSpeedSensor
         print("LDR haalt data op van de Arduino")
-        with Serial('/dev/serial0', 9600, bytesize=8, parity=PARITY_NONE, stopbits=1) as poort:
-            string = "DATA"
-            bericht = string.encode(encoding='UTF-8', errors='strict')
-            poort.write(bericht)
-            val = poort.readline()
-            vall = val.decode()
-            # waardeLDR = vall.rstrip()
+
+        string = "D"
+        bericht = string.encode(encoding='UTF-8', errors='strict')
+        poort.write(bericht)
+        val = poort.readline()
+        vall = val.decode()
+        # waardeLDR = vall.rstrip()
 
         # print("De lichtintensiteit van de LDR bedraagt: " + vall.rstrip() + " %")
 
         data_arduino = vall.rstrip().split("/")
         waardeLDR = data_arduino[0]
-        waardeAfstand1 = data_arduino[1]
-        waardeAfstand2 = data_arduino[2]
-        waardeAfstand3 = data_arduino[3]
-        waardeAfstand4 = data_arduino[4]
+        waardeSpeedSensor = data_arduino[1]
+        waardeAfstand1 = data_arduino[2]
+        waardeAfstand2 = data_arduino[3]
+        waardeAfstand3 = data_arduino[4]
+        waardeAfstand4 = data_arduino[5]
 
         print(waardeLDR)
+        print(waardeSpeedSensor + "KM/H")
         print(waardeAfstand1)
         print(waardeAfstand2)
         print(waardeAfstand3)
@@ -110,7 +125,7 @@ def get_data_serieel():
         # time.sleep(1)
 
         print(geef_temp())
-        # print(temperatuur[0:5])
+        print(temperatuur[0:5])
 
         DataRepository.create_historiek(
             3, 2, '2017-05-31 19:19:09', waardeLDR, "Dit is voorbeeldcommentaar ")
@@ -123,17 +138,6 @@ def get_data_serieel():
 
 thread = threading.Timer(0.005, get_data_serieel)
 thread.start()
-
-
-# def get_data_niet_serieel():
-#     print(geef_temp())
-#     # print(temperatuur[0:5])
-#     DataRepository.create_historiek(
-#         7, 3, '2017-05-31 19:19:09', temperatuur[0:5], "Dit is temperatuurdata")
-
-
-# thread_niet_serieel = threading.Timer(0.005, get_data_niet_serieel)
-# thread_niet_serieel.start()
 
 
 def buzzer1():
@@ -182,96 +186,6 @@ def buzzer1():
 thread_buzzer1 = threading.Timer(1, buzzer1)
 thread_buzzer1.start()
 
-# def buzzer1():
-#     # buzzer = GPIO.PWM(triggerPIN, 100)
-#     while True:
-#         if (int(waardeAfstand1) == -1):
-#             buzzer.stop()
-#         elif(int(waardeAfstand1) == 0):
-#             buzzer.start(10)
-#             time.sleep(0.05)
-#             buzzer.ChangeFrequency(100)
-#             # time.sleep(0.5)
-#             buzzer.stop()
-#             time.sleep(0.05)
-#         elif (int(waardeAfstand1) <= 30):
-#             buzzer.start(10)
-#             time.sleep(0.1)
-#             buzzer.ChangeFrequency(100)
-#             # time.sleep(0.5)
-#             buzzer.stop()
-#             time.sleep(0.1)
-#         elif (int(waardeAfstand1) <= 50):
-#             buzzer.start(10)
-#             time.sleep(0.15)
-#             buzzer.ChangeFrequency(100)
-#             # time.sleep(0.5)
-#             buzzer.stop()
-#             time.sleep(0.15)
-
-
-# thread_buzzer1 = threading.Timer(1, buzzer1)
-# thread_buzzer1.start()
-
-
-# def buzzer2():
-#     # buzzer = GPIO.PWM(triggerPIN, 100)
-#     while True:
-#         if (int(waardeAfstand2) == -1):
-#             buzzer.stop()
-#         elif(int(waardeAfstand2) == 0):
-#             buzzer.start(10)
-#             time.sleep(0.05)
-#             buzzer.ChangeFrequency(100)
-#             # time.sleep(0.5)
-#             buzzer.stop()
-#             time.sleep(0.05)
-#         elif (int(waardeAfstand2) <= 30):
-#             buzzer.start(10)
-#             time.sleep(0.1)
-#             buzzer.ChangeFrequency(100)
-#             # time.sleep(0.5)
-#             buzzer.stop()
-#             time.sleep(0.1)
-#         elif (int(waardeAfstand2) <= 50):
-#             buzzer.start(10)
-#             time.sleep(0.15)
-#             buzzer.ChangeFrequency(100)
-#             # time.sleep(0.5)
-#             buzzer.stop()
-#             time.sleep(0.15)
-#         elif (int(waardeAfstand2) > 50):
-#             buzzer.start(10)
-#             time.sleep(0.20)
-#             buzzer.ChangeFrequency(100)
-#             # time.sleep(0.5)
-#             buzzer.stop()
-#             time.sleep(0.20)
-
-
-# thread_buzzer2 = threading.Timer(1, buzzer2)
-# thread_buzzer2.start()
-
-
-# def get_data_JSN():
-#     while True:
-#         global waardeAfstand
-#         print("JSN haalt data op van de Arduino")
-#         with Serial('/dev/serial0', 9600, bytesize=8, parity=PARITY_NONE, stopbits=1) as poort:
-#             string = "JSN"
-#             bericht = string.encode(encoding='UTF-8', errors='strict')
-#             poort.write(bericht)
-#             val = poort.readline()
-#             vall = val.decode()
-#             waardeLDR = vall.rstrip()
-#             # DataRepository.create_historiek(
-#             #     3, 2, '2017-05-31 19:19:09', waardeLDR, "Dit is voorbeeldcommentaar ")
-#         print("Distance " + vall.rstrip() + " CM")
-#         time.sleep(0.5)
-
-
-# thread_JSN = threading.Timer(1, get_data_JSN)
-# thread_JSN.start()
 
 # ***LDR***
 
@@ -291,20 +205,7 @@ def geef_temp():
     return temperatuur
 
 
-# def get_temp():
-#     while True:
-#         print(geef_temp())
-#         # print(temperatuur[0:5])
-#         DataRepository.create_historiek(
-#             7, 3, '2017-05-31 19:19:09', temperatuur[0:5], "Dit is temperatuurdata")
-#         time.sleep(1)
-
-
-# thread_temp = threading.Timer(1, get_temp)
-# thread_temp.start()
-
 # ***Temperatuur***
-
 endpoint = '/api/v1'
 
 
@@ -347,17 +248,35 @@ verstuur_data_ldr_thread = threading.Timer(1, send_data)
 verstuur_data_ldr_thread.start()
 
 
-# def send_data_dallas():
-#     while is_sending:
-#         print('Verstuurd ***DALLAS*** data')
-#         status = temperatuur
-#         socketio.emit('B2F_verstuur_data_dallas', {
-#                       'temperatuur': status}, broadcast=True)
-#         time.sleep(5)
+def send_data_fast():
+    while is_sending:
+        print('Verstuurd ***JSN1*** data')
+        status = waardeAfstand1
+        socketio.emit('B2F_verstuur_data_JSN1', {
+                      'AfstandJSN1': status}, broadcast=True)
+        print('Verstuurd ***JSN2*** data')
+        status = waardeAfstand2
+        socketio.emit('B2F_verstuur_data_JSN2', {
+                      'AfstandJSN2': status}, broadcast=True)
+        print('Verstuurd ***JSN3*** data')
+        status = waardeAfstand3
+        socketio.emit('B2F_verstuur_data_JSN3', {
+                      'AfstandJSN3': status}, broadcast=True)
+        print('Verstuurd ***JSN4*** data')
+        status = waardeAfstand4
+        socketio.emit('B2F_verstuur_data_JSN4', {
+                      'AfstandJSN4': status}, broadcast=True)
+
+        print('Verstuurd ***SPEED*** data')
+        status = waardeSpeedSensor
+        socketio.emit('B2F_verstuur_data_speed', {
+                      'speed': status}, broadcast=True)
+
+        time.sleep(0.5)
 
 
-# verstuurd_data_dallas_thread = threading.Timer(1, send_data_dallas)
-# verstuurd_data_dallas_thread.start()
+send_data_fast_thread = threading.Timer(0.5, send_data_fast)
+send_data_fast_thread.start()
 
 
 @ app.route(endpoint + '/historiek', methods=['GET', 'POST'])
@@ -370,6 +289,26 @@ def get_historiek():
             gegevens['DeviceID'], gegevens['ActieID'], gegevens['Actiedatum'], gegevens['Waarde'], gegevens['Commentaar'])
         return jsonify(historiekID=nieuwe_historiek), 201
 
+
+def main():
+    try:
+        while True:
+            if state_LEDs == True:
+                GPIO.output(LEDs, 1)
+            elif state_LEDs == False:
+                GPIO.output(LEDs, 0)
+            time.sleep(0.5)
+
+    except KeyboardInterrupt as e:
+        print(e)
+    finally:
+        print("stop")
+        GPIO.cleanup()
+        poort.close()
+
+
+main_thread = threading.Timer(1, main)
+main_thread.start()
 
 # # ANDERE FUNCTIES
 if __name__ == '__main__':

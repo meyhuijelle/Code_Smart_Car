@@ -760,6 +760,7 @@ a:focus {
     max-width: 40rem;
     margin-bottom: 0;
     /* margin: 0 8px; */
+    width: 100%;
   }
 
   .c-text__layoutHeadlights{
@@ -809,6 +810,7 @@ a:focus {
     max-width: 40rem;
     margin-bottom: 0;
     /* margin: 0 8px; */
+    width: 100%;
   }
 
   .c-text__layoutHeadlights{
@@ -859,6 +861,7 @@ a:focus {
     max-width: 40rem;
     margin-bottom: 0;
     /* margin: 0 8px; */
+    width: 100%;
   }
 
   .c-text__layoutHeadlights{
@@ -926,6 +929,7 @@ a:focus {
     max-width: 40rem;
     margin-bottom: 0;
     /* margin: 0 8px; */
+    width: 100%;
   }
 
   .c-text__layoutHeadlights{
@@ -985,6 +989,21 @@ a:focus {
 .c-buttons{
   border: 0.3px
 }
+
+.c-button__style{
+  /* width: 54%; */
+  width: 168px;
+  height: 168px;
+  background-color: white;
+  border-radius: 25px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-flow: column;
+  box-shadow: 0 10px 20px rgba(0,0,0,0.10);
+}
+
+
 
 /*------------------------------------*\
   #UTILITIES
