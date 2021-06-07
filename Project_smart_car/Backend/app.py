@@ -34,7 +34,10 @@ triggerPIN = 22
 button = 17
 # LED1 = 5
 # LED2 = 6
-LEDs = [5, 6]
+# LEDs = [5, 6]
+led = 6
+
+LEDSTRING = 19
 
 # state_LED1 = False
 # state_LED2 = False
@@ -45,12 +48,20 @@ state_LEDs = False
 GPIO.setwarnings(False)
 GPIO.setmode(GPIO.BCM)
 GPIO.setup(triggerPIN, GPIO.OUT)
+GPIO.setup(LEDSTRING, GPIO.OUT)
+
+# GPIO.output(LEDSTRING, GPIO.HIGH)
+# time.sleep(1)
+# GPIO.output(LEDSTRING, GPIO.LOW)
+
+pwm = GPIO.PWM(LEDSTRING, 100)
+pwm.start(LEDSTRING)
 
 buzzer = GPIO.PWM(triggerPIN, 100)
 buzzer.stop()
 
 GPIO.setup(button, GPIO.IN, pull_up_down=GPIO.PUD_UP)
-GPIO.setup(LEDs, GPIO.OUT)
+GPIO.setup(led, GPIO.OUT)
 
 
 def switch_state_lights(btn):
@@ -295,9 +306,9 @@ def main():
     try:
         while True:
             if state_LEDs == True:
-                GPIO.output(LEDs, 1)
+                GPIO.output(led, 1)
             elif state_LEDs == False:
-                GPIO.output(LEDs, 0)
+                GPIO.output(led, 0)
             time.sleep(0.5)
 
     except KeyboardInterrupt as e:
@@ -306,6 +317,7 @@ def main():
         print("stop")
         GPIO.cleanup()
         poort.close()
+        GPIO.output(LEDSTRING, GPIO.LOW)
 
 
 main_thread = threading.Timer(1, main)
