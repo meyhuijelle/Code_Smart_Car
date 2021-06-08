@@ -1,5 +1,5 @@
 from io import StringIO
-from os import getegid
+from os import getegid, truncate
 import re
 import time
 from RPi import GPIO
@@ -108,15 +108,21 @@ def get_rpm(c):
     if (tijd != 0):
         rps = (1000/tijd)/20
         rpm = rps * 60
+        KMH = RPM_TO_KMH(rpm)
+        # if(counterButton == 2):
+        #     LCD.stuur_letters(str(round(KMH)))
+        #     LCD.init_LCD()
     else:
         print('verkeerde meting!')
-
-    KMH = RPM_TO_KMH(rpm)
 
     vorige_starttijd = start_timer
 
     if(KMH != vorige_snelheid):
         print(f"{round(KMH)} km/h----------------------------------------")
+        # while(counterButton == 2):
+        #     LCD.stuur_letters(str(round(KMH)))
+        #     LCD.init_LCD()
+        #     time.sleep(0.5)
 
     if(KMH >= 5 and KMH <= 10):
         # print("beennnnneeeer")
@@ -140,9 +146,24 @@ def switch_state_lights(btn):
     # print(state_LED2)
 
 
+# def thread_send_to_lCD():
+#     while counterButton == 2:
+#         LCD.stuur_letters(str(round(KMH)))
+#         time.sleep(0.3)
+#         LCD.init_LCD()
+
+
+# thread_LCD = threading.Timer(0.1, thread_send_to_lCD)
+
+
 def callback_IP(btn):
     print("Er is op me gedrukt!!!")
     global counterButton
+    global vorige_snelheid
+    global thread_LCD
+    global KMH
+
+    print(f"dit is de counter {counterButton}")
 
     counterButton = counterButton + 1
 
@@ -160,15 +181,35 @@ def callback_IP(btn):
         sturenLCD_Lijn2 = ip_adress[18:18+14]
         print(f"IP-adress: {ip_adress[18:18+14]}")
         LCD.stuur_letters(sturenLCD_Lijn2)
-        time.sleep(1)
+        # time.sleep(1)
 
     elif (counterButton == 2):
         print("We zitten voor de counterButton bij 2")
         LCD.init_LCD()
+        # LCD.nieuwe_lijn()
+        # stuur1 = f"{temperatuur}"
+        # stuur2 = "    "
+        # stuur3 = f"{waardeLDR}%"
+        # LCD.stuur_letters(stuur1)
+        # LCD.stuur_letters(stuur2)
+        # LCD.stuur_letters(stuur3)
+
+        # thread_LCD.start()
+
+        # localTeller = 0
+        # while True:
+        #     localTeller = localTeller + 1
+        # teVersturen = vorige_snelheid
+        #     LCD.stuur_letters(str(vorige_snelheid))
+        #     LCD.init_LCD()
+        #     time.sleep(0.05)
+        # # print(localTeller)
+        # time.sleep(0.5)
 
     elif (counterButton == 3):
         print("We zitten voor de counterButton bi 3")
         counterButton = 0
+        LCD.init_LCD()
 
 
 GPIO.add_event_detect(button, GPIO.RISING,
