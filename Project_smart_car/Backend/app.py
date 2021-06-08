@@ -155,7 +155,6 @@ def switch_state_lights(btn):
 
 # thread_LCD = threading.Timer(0.1, thread_send_to_lCD)
 
-
 def callback_IP(btn):
     print("Er is op me gedrukt!!!")
     global counterButton
@@ -167,6 +166,12 @@ def callback_IP(btn):
 
     counterButton = counterButton + 1
 
+    code_voor_callback()
+
+
+def code_voor_callback():
+    global counterButton
+    # while True:
     if (counterButton == 1):
         print("We zitten voor de counterButton bij 1")
         LCD.init_LCD()
@@ -186,6 +191,14 @@ def callback_IP(btn):
     elif (counterButton == 2):
         print("We zitten voor de counterButton bij 2")
         LCD.init_LCD()
+        LCD.vanaf3()
+        LCD.stuur_letters("km/h")
+
+        # while (counterButton == 2):
+
+        LCD.vanaf0()
+
+        LCD.stuur_letters(str(KMH))
         # LCD.nieuwe_lijn()
         # stuur1 = f"{temperatuur}"
         # stuur2 = "    "

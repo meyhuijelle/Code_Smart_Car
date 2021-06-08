@@ -47,6 +47,12 @@ class LCD:
     def nieuwe_lijn(self):
         self.send_instruction(0x80 | 0x40)
 
+    def vanaf3(self):
+        self.send_instruction(0x80 | 0x03)
+
+    def vanaf0(self):
+        self.send_instruction(0x80)
+
     def stuur_letters(self, thing):
         for letter in thing:
             letter = ord(letter)
