@@ -16,9 +16,10 @@ from flask_cors import CORS
 from flask_socketio import SocketIO, emit, send
 from flask import Flask, jsonify
 from repositories.DataRepository import DataRepository
-import LCD_klasse
+from helpers.LCD_klasse import LCD
 from subprocess import check_output
 
+LCD = LCD()
 
 # led3 = 21
 # knop1 = Button(20)
@@ -66,6 +67,8 @@ GPIO.setwarnings(False)
 GPIO.setmode(GPIO.BCM)
 GPIO.setup(triggerPIN, GPIO.OUT)
 GPIO.setup(LEDSTRING, GPIO.OUT)
+
+
 GPIO.setup(speedSensor, GPIO.IN)
 
 
@@ -84,7 +87,7 @@ GPIO.setup(led, GPIO.OUT)
 
 GPIO.setup(buttonIP, GPIO.IN, pull_up_down=GPIO.PUD_UP)
 
-LCD = LCD_klasse.LCD()
+
 ips = check_output(['hostname', '--all-ip-addresses'])
 
 
@@ -146,11 +149,22 @@ def callback_IP(btn):
     if (counterButton == 1):
         print("We zitten voor de counterButton bij 1")
         LCD.init_LCD()
+
+        sturenLCD_Lijn1 = "IP-address:"
+        LCD.stuur_letters(sturenLCD_Lijn1)
+
+        LCD.nieuwe_lijn()
+
+        # LCD.stuur_letters(letters)
         ip_adress = str(ips)
-        print(ip_adress)
+        sturenLCD_Lijn2 = ip_adress[18:18+14]
+        print(f"IP-adress: {ip_adress[18:18+14]}")
+        LCD.stuur_letters(sturenLCD_Lijn2)
+        time.sleep(1)
 
     elif (counterButton == 2):
         print("We zitten voor de counterButton bij 2")
+        LCD.init_LCD()
 
     elif (counterButton == 3):
         print("We zitten voor de counterButton bi 3")

@@ -3,7 +3,7 @@ import time
 from subprocess import check_output
 # import ALGEMEEN
 
-lijst_pinnen = [16, 12, 25, 24, 23, 26, 19, 13]  # laagste bits eerst
+lijst_pinnen = [16, 12, 25, 24, 23, 26, 5, 27]  # laagste bits eerst
 
 RS = 21
 E = 20
