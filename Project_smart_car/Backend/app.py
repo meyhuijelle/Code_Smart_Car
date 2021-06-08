@@ -16,10 +16,12 @@ from flask_cors import CORS
 from flask_socketio import SocketIO, emit, send
 from flask import Flask, jsonify
 from repositories.DataRepository import DataRepository
+import LCD_klasse
+from subprocess import check_output
 
 
 # led3 = 21
-knop1 = Button(20)
+# knop1 = Button(20)
 
 waardeLDR = 0
 temperatuur = 0
@@ -48,11 +50,15 @@ LEDSTRING = 19
 
 speedSensor = 13
 
+buttonIP = 18
+
 vorige_snelheid = 0
 
 # state_LED1 = False
 # state_LED2 = False
 state_LEDs = False
+
+counterButton = 0
 
 
 # Code voor Hardware
@@ -61,6 +67,7 @@ GPIO.setmode(GPIO.BCM)
 GPIO.setup(triggerPIN, GPIO.OUT)
 GPIO.setup(LEDSTRING, GPIO.OUT)
 GPIO.setup(speedSensor, GPIO.IN)
+
 
 # GPIO.output(LEDSTRING, GPIO.HIGH)
 # time.sleep(1)
@@ -74,6 +81,11 @@ buzzer.stop()
 
 GPIO.setup(button, GPIO.IN, pull_up_down=GPIO.PUD_UP)
 GPIO.setup(led, GPIO.OUT)
+
+GPIO.setup(buttonIP, GPIO.IN, pull_up_down=GPIO.PUD_UP)
+
+LCD = LCD_klasse.LCD()
+ips = check_output(['hostname', '--all-ip-addresses'])
 
 
 def RPM_TO_KMH(value_RPM):
@@ -125,10 +137,33 @@ def switch_state_lights(btn):
     # print(state_LED2)
 
 
+def callback_IP(btn):
+    print("Er is op me gedrukt!!!")
+    global counterButton
+
+    counterButton = counterButton + 1
+
+    if (counterButton == 1):
+        print("We zitten voor de counterButton bij 1")
+        LCD.init_LCD()
+        ip_adress = str(ips)
+        print(ip_adress)
+
+    elif (counterButton == 2):
+        print("We zitten voor de counterButton bij 2")
+
+    elif (counterButton == 3):
+        print("We zitten voor de counterButton bi 3")
+        counterButton = 0
+
+
 GPIO.add_event_detect(button, GPIO.RISING,
                       callback=switch_state_lights, bouncetime=200)
 
 GPIO.add_event_detect(speedSensor, GPIO.RISING, callback=get_rpm)
+
+GPIO.add_event_detect(buttonIP, GPIO.RISING,
+                      callback=callback_IP, bouncetime=200)
 
 poort = Serial('/dev/serial0', 9600, bytesize=8,
                parity=PARITY_NONE, stopbits=1)
