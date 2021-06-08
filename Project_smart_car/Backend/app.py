@@ -30,6 +30,12 @@ waardeAfstand4 = 0
 
 waardeSpeedSensor = 0
 
+KMH = 0
+rps = 0
+rpm = 0
+
+vorige_starttijd = int(round(time.time() * 1000))
+
 triggerPIN = 22
 button = 17
 # LED1 = 5
@@ -38,6 +44,11 @@ button = 17
 led = 6
 
 LEDSTRING = 19
+
+
+speedSensor = 13
+
+vorige_snelheid = 0
 
 # state_LED1 = False
 # state_LED2 = False
@@ -49,6 +60,7 @@ GPIO.setwarnings(False)
 GPIO.setmode(GPIO.BCM)
 GPIO.setup(triggerPIN, GPIO.OUT)
 GPIO.setup(LEDSTRING, GPIO.OUT)
+GPIO.setup(speedSensor, GPIO.IN)
 
 # GPIO.output(LEDSTRING, GPIO.HIGH)
 # time.sleep(1)
@@ -64,6 +76,46 @@ GPIO.setup(button, GPIO.IN, pull_up_down=GPIO.PUD_UP)
 GPIO.setup(led, GPIO.OUT)
 
 
+def RPM_TO_KMH(value_RPM):
+    return (0.1885 * value_RPM) * 0.25
+
+
+def get_rpm(c):
+    global KMH
+    global vorige_starttijd
+    global rps
+    global rpm
+    global vorige_snelheid
+
+    start_timer = int(round(time.time() * 1000))
+
+    tijd = start_timer - vorige_starttijd
+    if (tijd != 0):
+        rps = (1000/tijd)/20
+        rpm = rps * 60
+    else:
+        print('verkeerde meting!')
+
+    KMH = RPM_TO_KMH(rpm)
+
+    vorige_starttijd = start_timer
+
+    if(KMH != vorige_snelheid):
+        print(f"{round(KMH)} km/h----------------------------------------")
+
+    if(KMH >= 5 and KMH <= 10):
+        # print("beennnnneeeer")
+        pwm.ChangeDutyCycle(25)
+    elif (KMH >= 11 and KMH <= 20):
+        pwm.ChangeDutyCycle(50)
+    elif (KMH >= 21 and KMH <= 30):
+        pwm.ChangeDutyCycle(75)
+    else:
+        pwm.ChangeDutyCycle(1)
+
+    vorige_snelheid = KMH
+
+
 def switch_state_lights(btn):
     global state_LEDs
     # global state_LED2
@@ -75,6 +127,8 @@ def switch_state_lights(btn):
 
 GPIO.add_event_detect(button, GPIO.RISING,
                       callback=switch_state_lights, bouncetime=200)
+
+GPIO.add_event_detect(speedSensor, GPIO.RISING, callback=get_rpm)
 
 poort = Serial('/dev/serial0', 9600, bytesize=8,
                parity=PARITY_NONE, stopbits=1)
@@ -97,6 +151,34 @@ def error_handler(e):
     print(e)
 
 # ***DATA***
+
+# thread_JSN.start()
+
+
+def geef_temp():
+    global temperatuur
+    sensor_file = open(sensor_file_name, 'r')
+    for line in sensor_file:
+        lines = str.rstrip(line)  # weghalen van newlines \n.
+        # juiste regel vinden. --> indien niet voorkomt, geeft het -1 terug.
+        res = lines.find('t=')
+        if(res != -1):
+            temperatuur = f"{lines[res+2:res+4]}.{lines[res+5:res+7]} °C"
+    sensor_file.close()
+    return temperatuur
+
+
+def get_temp():
+    while True:
+        print(geef_temp())
+        # print(temperatuur[0:5])
+        DataRepository.create_historiek(
+            7, 3, '2017-05-31 19:19:09', temperatuur[0:5], "Dit is temperatuurdata")
+        time.sleep(10)
+
+
+thread_temp = threading.Timer(10, get_temp)
+thread_temp.start()
 
 
 def get_data_serieel():
@@ -136,14 +218,14 @@ def get_data_serieel():
 
         # time.sleep(1)
 
-        print(geef_temp())
+        # print(geef_temp())
         # print(temperatuur[0:5])
 
         DataRepository.create_historiek(
             3, 2, '2017-05-31 19:19:09', waardeLDR, "Dit is voorbeeldcommentaar ")
 
-        DataRepository.create_historiek(
-            7, 3, '2017-05-31 19:19:09', temperatuur[0:5], "Dit is temperatuurdata")
+        # DataRepository.create_historiek(
+        #     7, 3, '2017-05-31 19:19:09', temperatuur[0:5], "Dit is temperatuurdata")
 
         time.sleep(0.005)
 
@@ -202,19 +284,6 @@ thread_buzzer1.start()
 # ***LDR***
 
 # ***Temperatuur***
-
-
-def geef_temp():
-    global temperatuur
-    sensor_file = open(sensor_file_name, 'r')
-    for line in sensor_file:
-        lines = str.rstrip(line)  # weghalen van newlines \n.
-        # juiste regel vinden. --> indien niet voorkomt, geeft het -1 terug.
-        res = lines.find('t=')
-        if(res != -1):
-            temperatuur = f"{lines[res+2:res+4]}.{lines[res+5:res+7]} °C"
-    sensor_file.close()
-    return temperatuur
 
 
 # ***Temperatuur***
@@ -302,6 +371,14 @@ def get_historiek():
         return jsonify(historiekID=nieuwe_historiek), 201
 
 
+# def snelheid():
+#     get_rpm()
+
+
+# snelheid_thread = threading.Timer(0.1, snelheid)
+# snelheid_thread.start()
+
+
 def main():
     try:
         while True:
@@ -309,6 +386,7 @@ def main():
                 GPIO.output(led, 1)
             elif state_LEDs == False:
                 GPIO.output(led, 0)
+
             time.sleep(0.5)
 
     except KeyboardInterrupt as e:
