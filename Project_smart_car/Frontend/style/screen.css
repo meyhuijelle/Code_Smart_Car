@@ -1052,29 +1052,33 @@ a:focus {
 .c-divCar__layout{
   display: flex;
   justify-content: center;
-  /* margin-top: 16px; */
-  /* display: inline-block; */
-  /* margin-left: 8px; */
+  align-items: center;
 }
 
 .c-div1{
-  width: 100px;
-  /* height: 100px; */
-  background-color: red;
-  display: inline-block;
+  width: 30%;
+  float: right;
 }
 
 .c-div2{
-  width: 100px;
-  height: 100px;
-  background-color: green;
-  display: inline-block;
+  width: 30%;
+  float: left;
+  transform: rotateY(180deg);
+}
+
+.c-div3{
+  width: 40%;
+  margin: 0 auto;
+}
+
+.c-divkes{
+  /* display: flex;
+  align-content: center; */
 }
 
 .c-divDistance__layout{
   display: flex;
   justify-content: center;
-  /* margin-top: 16px; */
 }
 
 .c-divDistance__layoutHor{
@@ -1086,9 +1090,15 @@ a:focus {
   width: 55px;
   height: 15px;
   background-color: green;
-  /* display: flex;
-  justify-content: center; */
-  /* border: 1px solid black; */
+}
+
+.c-parking__layoutSMHorSM{
+  background-color: white;
+  width:  15px;
+  height: 55px;
+  background-color: green;
+  margin-bottom: 8px;
+  display: inline-block;
 }
 
 .c-parking__layoutSM2{
@@ -1097,9 +1107,6 @@ a:focus {
   height: 15px;
   margin-bottom: 8px;
   background-color: green;
-  /* display: flex;
-  justify-content: center; */
-  /* border: 1px solid black; */
 }
 
 .c-parking__layoutMD{
@@ -1107,8 +1114,17 @@ a:focus {
   width: 75px;
   height: 15px;
   margin-bottom: 8px;
-  /* background-color: #E3EB00; */
   background-color: yellow;
+}
+
+.c-parking__layoutHorMD{
+  background-color: white;
+  width: 15px;
+  height: 75px;
+  margin-bottom: 0px;
+  background-color: yellow;
+  margin-left: 6px;
+  display: inline-block;
 }
 
 .c-parking__layoutlg{
@@ -1119,12 +1135,136 @@ a:focus {
   background-color: orange;
 }
 
+.c-parking__layoutHorlg{
+  background-color: white;
+  width: 15px;
+  height: 95px;
+  margin-bottom: -8px;
+  background-color: orange;
+  display: inline-block;
+  margin-left: 6px;
+  
+}
+
 .c-parking__layoutxl{
   background-color: white;
   width: 115px;
   height: 15px;
   margin-bottom: 8px;
   background-color: red;
+}
+
+.c-parking__layoutHorxl{
+  background-color: white;
+  width: 15px;
+  height: 115px;
+  margin-bottom: -16px;
+  background-color: red;
+  margin-left: 6px;
+  display: inline-block;
+}
+
+
+
+@media(max-width: 320px){
+  .c-div1{
+    width: 65px;
+    float: right;
+  }
+  
+  .c-div2{
+    width: 65px;
+    float: left;
+    
+  }
+  
+  .c-div3{
+    width: 150px;
+    margin: 0 auto;
+  }
+  
+.c-parking__layoutSMHorSM{
+  background-color: white;
+  width:  10px;
+  height: 55px;
+  background-color: green;
+  margin-left: -8px;
+  margin-bottom: 8px;
+  display: inline-block;
+}
+
+.c-parking__layoutHorMD{
+  background-color: white;
+  width: 10px;
+  height: 75px;
+  margin-bottom: 0px;
+  background-color: yellow;
+  margin-left: 4px;
+  display: inline-block;
+}
+
+.c-parking__layoutHorlg{
+  background-color: white;
+  width: 10px;
+  height: 95px;
+  margin-bottom: -8px;
+  background-color: orange;
+  display: inline-block;
+  margin-left: 4px;
+  
+}
+
+.c-parking__layoutHorxl{
+  background-color: white;
+  width: 10px;
+  height: 115px;
+  margin-bottom: -16px;
+  background-color: red;
+  margin-left: 4px;
+  display: inline-block;
+}
+
+.c-parking__layoutSM{
+  background-color: white;
+  width: 55px;
+  height: 10px;
+  background-color: green;
+}
+
+.c-parking__layoutSM2{
+  background-color: white;
+  width: 55px;
+  height: 10px;
+  margin-bottom: 8px;
+  background-color: green;
+}
+
+.c-parking__layoutMD{
+  background-color: white;
+  width: 75px;
+  height: 10px;
+  margin-bottom: 8px;
+  background-color: yellow;
+}
+
+.c-parking__layoutlg{
+  background-color: white;
+  width: 95px;
+  height: 10px;
+  margin-bottom: 8px;
+  background-color: orange;
+}
+
+
+.c-parking__layoutxl{
+  background-color: white;
+  width: 115px;
+  height: 10px;
+  margin-bottom: 8px;
+  background-color: red;
+}
+
+
 }
 
 /* @media(max-width: 420px){

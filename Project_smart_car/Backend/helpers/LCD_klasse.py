@@ -47,6 +47,12 @@ class LCD:
     def nieuwe_lijn(self):
         self.send_instruction(0x80 | 0x40)
 
+    def vanaf1(self):
+        self.send_instruction(0x80 | 0x01)
+
+    def vanaf2(self):
+        self.send_instruction(0x80 | 0x02)
+
     def vanaf3(self):
         self.send_instruction(0x80 | 0x03)
 

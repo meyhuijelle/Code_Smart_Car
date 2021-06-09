@@ -90,6 +90,8 @@ GPIO.setup(buttonIP, GPIO.IN, pull_up_down=GPIO.PUD_UP)
 
 ips = check_output(['hostname', '--all-ip-addresses'])
 
+send_LCD = False
+
 
 def RPM_TO_KMH(value_RPM):
     return (0.1885 * value_RPM) * 0.25
@@ -171,6 +173,7 @@ def callback_IP(btn):
 
 def code_voor_callback():
     global counterButton
+    global send_LCD
     # while True:
     if (counterButton == 1):
         print("We zitten voor de counterButton bij 1")
@@ -191,14 +194,14 @@ def code_voor_callback():
     elif (counterButton == 2):
         print("We zitten voor de counterButton bij 2")
         LCD.init_LCD()
+        time.sleep(0.1)
         LCD.vanaf3()
+        time.sleep(0.1)
         LCD.stuur_letters("km/h")
+        send_LCD = True
 
         # while (counterButton == 2):
 
-        LCD.vanaf0()
-
-        LCD.stuur_letters(str(KMH))
         # LCD.nieuwe_lijn()
         # stuur1 = f"{temperatuur}"
         # stuur2 = "    "
@@ -459,8 +462,8 @@ def send_data_fast():
         time.sleep(1)
 
 
-send_data_fast_thread = threading.Timer(0.5, send_data_fast)
-send_data_fast_thread.start()
+# send_data_fast_thread = threading.Timer(0.5, send_data_fast)
+# send_data_fast_thread.start()
 
 
 @ app.route(endpoint + '/historiek', methods=['GET', 'POST'])
@@ -483,14 +486,61 @@ def get_historiek():
 
 
 def main():
+    global send_LCD
+    global temperatuur
+    lelteller = 50
+    # LCD.init_LCD()
     try:
         while True:
             if state_LEDs == True:
                 GPIO.output(led, 1)
             elif state_LEDs == False:
                 GPIO.output(led, 0)
+            # print(f"temp {str(temperatuur)[0:5]}")
+            # code_voor_callback()
+            # print(lelteller)
+            if(counterButton == 2 and send_LCD == True):
+                if lelteller == 50:
+                    LCD.nieuwe_lijn()
+                    stuur1 = f"{str(temperatuur)[0:5]}"
+                    stuur2 = "°"
+                    stuur3 = "C"
+                    stuur4 = "     "
+                    stuur5 = f"{waardeLDR}%"
+                    LCD.stuur_letters(stuur1)
+                    LCD.send_character(ord(stuur2))
+                    LCD.stuur_letters(stuur3)
+                    LCD.stuur_letters(stuur4)
+                    LCD.stuur_letters(stuur5)
+                    lelteller = 0
 
-            time.sleep(0.5)
+                LCD.vanaf0()
+                LCD.stuur_letters(str(round(KMH)))
+                lelteller = lelteller + 1
+
+                # if(len(str(KMH)) == 1):
+                #     print("benner")
+                #     LCD.vanaf0()
+                #     LCD.stuur_letters("00")
+                #     LCD.vanaf2()
+                #     LCD.stuur_letters(str(round(KMH)))
+                # elif(len(str(KMH)) == 2):
+                #     LCD.vanaf0()
+                #     LCD.stuur_letters("0")
+                #     LCD.vanaf1()
+                #     LCD.stuur_letters(str(round(KMH)))
+                # elif(len(str(KMH)) == 3):
+                #     LCD.vanaf0()
+                #     LCD.stuur_letters(str(round(KMH)))
+
+                # LCD.init_LCD()
+                # time.sleep(0.1)
+                # LCD.vanaf0()
+                # LCD.stuur_letters("   ")
+            else:
+                send_LCD = False
+
+            time.sleep(0.1)
 
     except KeyboardInterrupt as e:
         print(e)
