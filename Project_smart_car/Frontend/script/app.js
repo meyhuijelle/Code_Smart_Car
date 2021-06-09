@@ -104,6 +104,16 @@ const listenToUI = function () {
     console.log('***contact*** button pushed!')
     window.location.href = 'contact.html'
   })
+  const historyButton = document.querySelector('.js-buttonHistory');
+  historyButton.addEventListener('click', function(){
+    console.log('***history*** button pushed!')
+    window.location.href = 'history.html'
+  })
+  const parkingSensButton = document.querySelector(".js-parkingSensButton");
+  parkingSensButton.addEventListener('click', function(){
+    console.log('***parkingSens*** button pushed!')
+    window.location.href = 'parkingSens.html'
+  })
   } 
 
   

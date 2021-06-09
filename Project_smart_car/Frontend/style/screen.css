@@ -891,6 +891,10 @@ a:focus {
     border: 1px solid black
   }
 
+  .o-layout__marginBtn{
+    margin-left: 16px;
+  }
+
   .c-less-important__text{
     text-align: center;
     color: #595959;
@@ -1002,6 +1006,59 @@ a:focus {
   flex-flow: column;
   box-shadow: 0 10px 20px rgba(0,0,0,0.10);
 }
+
+.c-button{
+
+  padding: 2em;
+  border-radius: 8px;
+  box-shadow: 0 10px 20px rgba(0,0,0,0.10);
+  margin: 24px 12px;
+  /* margin-bottom: 24px; */
+  aspect-ratio: 1/1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background-color: white;
+  border-radius: 25px;
+  /* max-width: 168px;
+  max-height: 168px;
+  width: 100%;
+  height: 100%; */
+
+}
+
+.c-text__layout-btn{
+  text-align: center;
+}
+
+@media(max-width: 425px){
+  .c-button{
+    max-width: 160px;
+    max-height: 160px;
+    width: 100%;
+    height: 100%;
+    font-size: 14px;
+    margin: 10px auto;
+  }
+}
+
+/* @media(max-width: 420px){
+  .c-button{
+    max-width: 168px;
+    max-height: 168px;
+    width: 100%;
+    height: 100%;
+    font-size: 14px;
+    margin: 10px auto;
+  }
+} */
+
+/* .c-btns__container{
+  display: grid;
+  grid-template-rows: 1fr 1fr;
+  grid-template-columns: 1fr 1fr;
+} */
 
 
 

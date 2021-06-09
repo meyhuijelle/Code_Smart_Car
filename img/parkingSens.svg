@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="37.591" height="24" viewBox="0 0 37.591 24">
+  <g id="Group_446" data-name="Group 446" transform="translate(-319.046 -336)">
+    <g id="directions_car_black_24dp" transform="translate(326 336)">
+      <path id="Path_12" data-name="Path 12" d="M0,0H24V24H0Z" fill="none"/>
+      <path id="Path_13" data-name="Path 13" d="M18.92,6.01A1.494,1.494,0,0,0,17.5,5H6.5A1.5,1.5,0,0,0,5.08,6.01L3,12v8a1,1,0,0,0,1,1H5a1,1,0,0,0,1-1V19H18v1a1,1,0,0,0,1,1h1a1,1,0,0,0,1-1V12ZM6.5,16A1.5,1.5,0,1,1,8,14.5,1.5,1.5,0,0,1,6.5,16Zm11,0A1.5,1.5,0,1,1,19,14.5,1.5,1.5,0,0,1,17.5,16ZM5,11,6.5,6.5h11L19,11Z"/>
+    </g>
+    <line id="Line_2" data-name="Line 2" y1="2" x2="6" transform="translate(349.5 341.5)" fill="none" stroke="#707070" stroke-width="1"/>
+    <line id="Line_3" data-name="Line 3" x2="4" transform="translate(350 348)" fill="none" stroke="#707070" stroke-width="1"/>
+    <line id="Line_4" data-name="Line 4" x2="7" y2="2" transform="translate(349.5 351.5)" fill="none" stroke="#707070" stroke-width="1"/>
+    <line id="Line_5" data-name="Line 5" x1="5.303" y1="2" transform="translate(320.197 341.5)" fill="none" stroke="#707070" stroke-width="1"/>
+    <line id="Line_6" data-name="Line 6" x1="4" transform="translate(321 348)" fill="none" stroke="#707070" stroke-width="1"/>
+    <line id="Line_7" data-name="Line 7" x1="6.303" y2="2" transform="translate(319.197 351.5)" fill="none" stroke="#707070" stroke-width="1"/>
+  </g>
+</svg>
