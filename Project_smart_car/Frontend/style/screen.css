@@ -1043,6 +1043,90 @@ a:focus {
   }
 }
 
+.c-car__layout{
+  width: 150px;
+  height: 306px;
+  display: block;
+}
+
+.c-divCar__layout{
+  display: flex;
+  justify-content: center;
+  /* margin-top: 16px; */
+  /* display: inline-block; */
+  /* margin-left: 8px; */
+}
+
+.c-div1{
+  width: 100px;
+  /* height: 100px; */
+  background-color: red;
+  display: inline-block;
+}
+
+.c-div2{
+  width: 100px;
+  height: 100px;
+  background-color: green;
+  display: inline-block;
+}
+
+.c-divDistance__layout{
+  display: flex;
+  justify-content: center;
+  /* margin-top: 16px; */
+}
+
+.c-divDistance__layoutHor{
+  display: inline-block
+}
+
+.c-parking__layoutSM{
+  background-color: white;
+  width: 55px;
+  height: 15px;
+  background-color: green;
+  /* display: flex;
+  justify-content: center; */
+  /* border: 1px solid black; */
+}
+
+.c-parking__layoutSM2{
+  background-color: white;
+  width: 55px;
+  height: 15px;
+  margin-bottom: 8px;
+  background-color: green;
+  /* display: flex;
+  justify-content: center; */
+  /* border: 1px solid black; */
+}
+
+.c-parking__layoutMD{
+  background-color: white;
+  width: 75px;
+  height: 15px;
+  margin-bottom: 8px;
+  /* background-color: #E3EB00; */
+  background-color: yellow;
+}
+
+.c-parking__layoutlg{
+  background-color: white;
+  width: 95px;
+  height: 15px;
+  margin-bottom: 8px;
+  background-color: orange;
+}
+
+.c-parking__layoutxl{
+  background-color: white;
+  width: 115px;
+  height: 15px;
+  margin-bottom: 8px;
+  background-color: red;
+}
+
 /* @media(max-width: 420px){
   .c-button{
     max-width: 168px;
