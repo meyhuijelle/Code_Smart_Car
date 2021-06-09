@@ -93,7 +93,43 @@ const listenToUI = function () {
   //   console.log('***contact*** button pushed!')
   //   window.location.href = 'contact.html'
   // })
-  if(htmlTemp){
+  // if(htmlTemp){
+    if(htmlTemp){
+      const contactButton = document.querySelector('.js-buttonContact');
+      contactButton.addEventListener('click', function(){
+      console.log('***contact*** button pushed!')
+      window.location.href = 'contact.html'
+    })
+
+    const historyButton = document.querySelector('.js-buttonHistory');
+    historyButton.addEventListener('click', function(){
+      console.log('***history*** button pushed!')
+      window.location.href = 'history.html'
+    })
+
+    const parkingSensButton = document.querySelector(".js-parkingSensButton");
+    parkingSensButton.addEventListener('click', function(){
+      console.log('***parkingSens*** button pushed!')
+      window.location.href = 'parkingSens.html'
+    })
+    }
+
+    if(htmlInfo){
+      const contactButton = document.querySelector('.js-buttonContact');
+      contactButton.addEventListener('click', function(){
+      console.log('***contact*** button pushed!')
+      window.location.href = 'contact.html'
+    })
+  }
+
+  if(htmlContact){
+    const contactButton = document.querySelector('.js-buttonContact');
+      contactButton.addEventListener('click', function(){
+      console.log('***contact*** button pushed!')
+      window.location.href = 'contact.html'
+    })
+  }
+
     const homeButton = document.querySelector('.js-homeButton');
     homeButton.addEventListener('click', function(){
       console.log('Back to home screen!')
@@ -104,27 +140,14 @@ const listenToUI = function () {
       console.log('***info*** button pushed!')
       window.location.href = 'info.html'
     })
-    const contactButton = document.querySelector('.js-buttonContact');
-    contactButton.addEventListener('click', function(){
-      console.log('***contact*** button pushed!')
-      window.location.href = 'contact.html'
-    })
-    const historyButton = document.querySelector('.js-buttonHistory');
-    historyButton.addEventListener('click', function(){
-      console.log('***history*** button pushed!')
-      window.location.href = 'history.html'
-    })
-    const parkingSensButton = document.querySelector(".js-parkingSensButton");
-    parkingSensButton.addEventListener('click', function(){
-      console.log('***parkingSens*** button pushed!')
-      window.location.href = 'parkingSens.html'
-    })
+   
+    
 
     // socket.on('B2F_verstuur_data_speed', function(jsonObject){
   //   console.log(jsonObject)
   //   document.querySelector('.js-speed').innerHTML = `${jsonObject.speed} km/h`
   // })
-  }
+  // }
   
   } 
 
@@ -152,7 +175,7 @@ const listenToSocket = function () {
     socket.on('B2F_verstuur_data_JSN1', function(jsonObject){
     console.log(jsonObject)
     document.querySelector('.js-disSens1').innerHTML = `${jsonObject.AfstandJSN1}`
-    if(jsonObject.AfstandJSN1 == 0){
+    if(jsonObject.AfstandJSN1 == -1){
       // console.log('neeee');
       visual1_top.classList.remove('c-parking__layoutSM')
       visual2_top.classList.remove('c-parking__layoutMD')
@@ -162,6 +185,35 @@ const listenToSocket = function () {
       // console.log(visual2_top.classList)
       // console.log(visual3_top.classList)
       // console.log(visual4_top.classList)
+    }else if(jsonObject.AfstandJSN1 == 0){
+      visual1_top.classList.add('c-parking__layoutSM')
+      visual2_top.classList.add('c-parking__layoutMD')
+      visual3_top.classList.add('c-parking__layoutlg')
+      visual4_top.classList.add('c-parking__layoutxl')
+
+      // visual4_bottom.classList.add('c-parking__layoutxl')
+    }
+    else if(jsonObject.AfstandJSN1 <= 30){
+      visual1_top.classList.add('c-parking__layoutSM')
+      visual2_top.classList.add('c-parking__layoutMD')
+      visual3_top.classList.add('c-parking__layoutlg')
+      visual4_top.classList.remove('c-parking__layoutxl')
+
+      // visual4_bottom.classList.add('c-parking__layoutxl')
+    }else if(jsonObject.AfstandJSN1 <= 50){
+      visual1_top.classList.add('c-parking__layoutSM')
+      visual2_top.classList.add('c-parking__layoutMD')
+      visual3_top.classList.remove('c-parking__layoutlg')
+      visual4_top.classList.remove('c-parking__layoutxl')
+
+      // visual4_bottom.classList.add('c-parking__layoutxl')
+    }else if(jsonObject.AfstandJSN1 > 50){
+      visual1_top.classList.add('c-parking__layoutSM')
+      visual2_top.classList.remove('c-parking__layoutMD')
+      visual3_top.classList.remove('c-parking__layoutlg')
+      visual4_top.classList.remove('c-parking__layoutxl')
+
+      // visual4_bottom.classList.add('c-parking__layoutxl')
     }
   })
 
@@ -169,7 +221,8 @@ const listenToSocket = function () {
     console.log(jsonObject)
     document.querySelector('.js-disSens2').innerHTML = `${jsonObject.AfstandJSN2}`
 
-    if(jsonObject.AfstandJSN2 == 0){
+   
+    if(jsonObject.AfstandJSN2 == -1){
       // console.log('neeee');
       visual1_bottom.classList.remove('c-parking__layoutSM2')
       visual2_bottom.classList.remove('c-parking__layoutMD')
@@ -180,6 +233,40 @@ const listenToSocket = function () {
       // console.log(visual2_top.classList)
       // console.log(visual3_top.classList)
       // console.log(visual4_top.classList)
+    }else if(jsonObject.AfstandJSN2 == 0){
+      visual1_bottom.classList.add('c-parking__layoutSM2')
+      visual2_bottom.classList.add('c-parking__layoutMD')
+      visual3_bottom.classList.add('c-parking__layoutlg')
+      visual4_bottom.classList.add('c-parking__layoutxl')
+    }
+    
+    else if(jsonObject.AfstandJSN2 <= 30){
+      visual1_bottom.classList.add('c-parking__layoutSM2')
+      visual2_bottom.classList.add('c-parking__layoutMD')
+      visual3_bottom.classList.add('c-parking__layoutlg')
+      visual4_bottom.classList.remove('c-parking__layoutxl')
+
+      // visual4_bottom.classList.add('c-parking__layoutxl')
+    }
+    
+    else if(jsonObject.AfstandJSN2 <= 50){
+      visual1_bottom.classList.add('c-parking__layoutSM2')
+      visual2_bottom.classList.add('c-parking__layoutMD')
+      visual3_bottom.classList.remove('c-parking__layoutlg')
+      visual4_bottom.classList.remove('c-parking__layoutxl')
+
+      // visual3_bottom.classList.add('c-parking__layoutlg')
+      // visual4_bottom.classList.add('c-parking__layoutxl')
+    }
+    
+    else if(jsonObject.AfstandJSN2 > 50){
+      visual1_bottom.classList.add('c-parking__layoutSM2')
+      visual2_bottom.classList.remove('c-parking__layoutMD')
+      visual3_bottom.classList.remove('c-parking__layoutlg')
+      visual4_bottom.classList.remove('c-parking__layoutxl')
+      // visual2_bottom.classList.add('c-parking__layoutMD')
+      // visual3_bottom.classList.add('c-parking__layoutlg')
+      // visual4_bottom.classList.add('c-parking__layoutxl')
     }
   })
 
@@ -187,7 +274,7 @@ const listenToSocket = function () {
     console.log(jsonObject)
     document.querySelector('.js-disSens3').innerHTML = `${jsonObject.AfstandJSN3}`
 
-    if(jsonObject.AfstandJSN3 == 0){
+    if(jsonObject.AfstandJSN3 == -1){
       // console.log('neeee');
       visual1_right.classList.remove('c-parking__layoutSMHorSM')
       visual2_right.classList.remove('c-parking__layoutHorMD')
@@ -198,6 +285,43 @@ const listenToSocket = function () {
       // console.log(visual2_top.classList)
       // console.log(visual3_top.classList)
       // console.log(visual4_top.classList)
+      
+
+    }
+    else if(jsonObject.AfstandJSN3 == 0){
+      visual1_right.classList.add('c-parking__layoutSMHorSM')
+      visual2_right.classList.add('c-parking__layoutHorMD')
+      visual3_right.classList.add('c-parking__layoutHorlg')
+      visual4_right.classList.add('c-parking__layoutHorxl')
+    }
+    
+    else if(jsonObject.AfstandJSN3 <= 30){
+      visual1_right.classList.add('c-parking__layoutSMHorSM')
+      visual2_right.classList.add('c-parking__layoutHorMD')
+      visual3_right.classList.add('c-parking__layoutHorlg')
+      visual4_right.classList.remove('c-parking__layoutHorxl')
+
+      // visual4_bottom.classList.add('c-parking__layoutxl')
+    }
+    
+    else if(jsonObject.AfstandJSN3 <= 50){
+      visual1_right.classList.add('c-parking__layoutSMHorSM')
+      visual2_right.classList.add('c-parking__layoutHorMD')
+      visual3_right.classList.remove('c-parking__layoutlg')
+      visual4_right.classList.remove('c-parking__layoutHorxl')
+
+      // visual3_bottom.classList.add('c-parking__layoutlg')
+      // visual4_bottom.classList.add('c-parking__layoutxl')
+    }
+    
+    else if(jsonObject.AfstandJSN3 > 50){
+      visual1_right.classList.add('c-parking__layoutSMHorSM')
+      visual2_right.classList.remove('c-parking__layoutHorMD')
+      visual3_right.classList.remove('c-parking__layoutHorlg')
+      visual4_right.classList.remove('c-parking__layoutHorxl')
+      // visual2_bottom.classList.add('c-parking__layoutMD')
+      // visual3_bottom.classList.add('c-parking__layoutlg')
+      // visual4_bottom.classList.add('c-parking__layoutxl')
     }
   })
 
@@ -205,7 +329,7 @@ const listenToSocket = function () {
     console.log(jsonObject)
     document.querySelector('.js-disSens4').innerHTML = `${jsonObject.AfstandJSN4}`
 
-    if(jsonObject.AfstandJSN4 == 0){
+    if(jsonObject.AfstandJSN4 == -1){
       // console.log('neeee');
       visual1_left.classList.remove('c-parking__layoutSMHorSM')
       visual2_left.classList.remove('c-parking__layoutHorMD')
@@ -216,6 +340,40 @@ const listenToSocket = function () {
       // console.log(visual2_top.classList)
       // console.log(visual3_top.classList)
       // console.log(visual4_top.classList)
+    }else if(jsonObject.AfstandJSN4 == 0){
+      visual1_left.classList.add('c-parking__layoutSMHorSM')
+      visual2_left.classList.add('c-parking__layoutHorMD')
+      visual3_left.classList.add('c-parking__layoutHorlg')
+      visual4_left.classList.add('c-parking__layoutHorxl')
+    }
+    
+    else if(jsonObject.AfstandJSN4 <= 30){
+      visual1_left.classList.add('c-parking__layoutSMHorSM')
+      visual2_left.classList.add('c-parking__layoutHorMD')
+      visual3_left.classList.add('c-parking__layoutHorlg')
+      visual4_left.classList.remove('c-parking__layoutHorxl')
+
+      // visual4_bottom.classList.add('c-parking__layoutxl')
+    }
+    
+    else if(jsonObject.AfstandJSN4 <= 50){
+      visual1_left.classList.add('c-parking__layoutSMHorSM')
+      visual2_left.classList.add('c-parking__layoutHorMD')
+      visual3_left.classList.remove('c-parking__layoutlg')
+      visual4_left.classList.remove('c-parking__layoutHorxl')
+
+      // visual3_bottom.classList.add('c-parking__layoutlg')
+      // visual4_bottom.classList.add('c-parking__layoutxl')
+    }
+    
+    else if(jsonObject.AfstandJSN4 > 50){
+      visual1_left.classList.add('c-parking__layoutSMHorSM')
+      visual2_left.classList.remove('c-parking__layoutHorMD')
+      visual3_left.classList.remove('c-parking__layoutHorlg')
+      visual4_left.classList.remove('c-parking__layoutHorxl')
+      // visual2_bottom.classList.add('c-parking__layoutMD')
+      // visual3_bottom.classList.add('c-parking__layoutlg')
+      // visual4_bottom.classList.add('c-parking__layoutxl')
     }
   })
 

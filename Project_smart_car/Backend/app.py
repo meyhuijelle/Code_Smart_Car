@@ -97,46 +97,46 @@ def RPM_TO_KMH(value_RPM):
     return (0.1885 * value_RPM) * 0.25
 
 
-def get_rpm(c):
-    global KMH
-    global vorige_starttijd
-    global rps
-    global rpm
-    global vorige_snelheid
+# def get_rpm(c):
+#     global KMH
+#     global vorige_starttijd
+#     global rps
+#     global rpm
+#     global vorige_snelheid
 
-    start_timer = int(round(time.time() * 1000))
+#     start_timer = int(round(time.time() * 1000))
 
-    tijd = start_timer - vorige_starttijd
-    if (tijd != 0):
-        rps = (1000/tijd)/20
-        rpm = rps * 60
-        KMH = RPM_TO_KMH(rpm)
-        # if(counterButton == 2):
-        #     LCD.stuur_letters(str(round(KMH)))
-        #     LCD.init_LCD()
-    else:
-        print('verkeerde meting!')
+#     tijd = start_timer - vorige_starttijd
+#     if (tijd != 0):
+#         rps = (1000/tijd)/20
+#         rpm = rps * 60
+#         KMH = RPM_TO_KMH(rpm)
+#         # if(counterButton == 2):
+#         #     LCD.stuur_letters(str(round(KMH)))
+#         #     LCD.init_LCD()
+#     else:
+#         print('verkeerde meting!')
 
-    vorige_starttijd = start_timer
+#     vorige_starttijd = start_timer
 
-    if(KMH != vorige_snelheid):
-        print(f"{round(KMH)} km/h----------------------------------------")
-        # while(counterButton == 2):
-        #     LCD.stuur_letters(str(round(KMH)))
-        #     LCD.init_LCD()
-        #     time.sleep(0.5)
+#     if(KMH != vorige_snelheid):
+#         print(f"{round(KMH)} km/h----------------------------------------")
+#         # while(counterButton == 2):
+#         #     LCD.stuur_letters(str(round(KMH)))
+#         #     LCD.init_LCD()
+#         #     time.sleep(0.5)
 
-    if(KMH >= 5 and KMH <= 10):
-        # print("beennnnneeeer")
-        pwm.ChangeDutyCycle(25)
-    elif (KMH >= 11 and KMH <= 20):
-        pwm.ChangeDutyCycle(50)
-    elif (KMH >= 21 and KMH <= 30):
-        pwm.ChangeDutyCycle(75)
-    else:
-        pwm.ChangeDutyCycle(1)
+#     if(KMH >= 5 and KMH <= 10):
+#         # print("beennnnneeeer")
+#         pwm.ChangeDutyCycle(25)
+#     elif (KMH >= 11 and KMH <= 20):
+#         pwm.ChangeDutyCycle(50)
+#     elif (KMH >= 21 and KMH <= 30):
+#         pwm.ChangeDutyCycle(75)
+#     else:
+#         pwm.ChangeDutyCycle(1)
 
-    vorige_snelheid = KMH
+#     vorige_snelheid = KMH
 
 
 def switch_state_lights(btn):
@@ -231,7 +231,7 @@ def code_voor_callback():
 GPIO.add_event_detect(button, GPIO.RISING,
                       callback=switch_state_lights, bouncetime=200)
 
-GPIO.add_event_detect(speedSensor, GPIO.RISING, callback=get_rpm)
+# GPIO.add_event_detect(speedSensor, GPIO.RISING, callback=get_rpm)
 
 GPIO.add_event_detect(buttonIP, GPIO.RISING,
                       callback=callback_IP, bouncetime=200)
@@ -383,8 +383,8 @@ def buzzer1():
             #     "444444444444444444444444444444444444444444444444444444444444444444444444444")
 
 
-# thread_buzzer1 = threading.Timer(1, buzzer1)
-# thread_buzzer1.start()
+thread_buzzer1 = threading.Timer(1, buzzer1)
+thread_buzzer1.start()
 
 
 # ***LDR***
