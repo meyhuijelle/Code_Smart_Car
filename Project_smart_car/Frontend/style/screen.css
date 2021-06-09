@@ -1058,12 +1058,14 @@ a:focus {
 .c-div1{
   width: 30%;
   float: right;
+  margin-top: 99.5px;
 }
 
 .c-div2{
   width: 30%;
   float: left;
   transform: rotateY(180deg);
+  margin-top: 99.5px;
 }
 
 .c-div3{
@@ -1072,8 +1074,7 @@ a:focus {
 }
 
 .c-divkes{
-  /* display: flex;
-  align-content: center; */
+  /* margin-top: 200px; */
 }
 
 .c-divDistance__layout{
@@ -1170,6 +1171,7 @@ a:focus {
   .c-div1{
     width: 65px;
     float: right;
+    /* margin-top: 200px; */
   }
   
   .c-div2{

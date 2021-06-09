@@ -383,8 +383,8 @@ def buzzer1():
             #     "444444444444444444444444444444444444444444444444444444444444444444444444444")
 
 
-thread_buzzer1 = threading.Timer(1, buzzer1)
-thread_buzzer1.start()
+# thread_buzzer1 = threading.Timer(1, buzzer1)
+# thread_buzzer1.start()
 
 
 # ***LDR***
@@ -437,24 +437,24 @@ verstuur_data_ldr_thread.start()
 
 def send_data_fast():
     while is_sending:
-        print('Verstuurd ***JSN1*** data')
+        # print('Verstuurd ***JSN1*** data')
         status = waardeAfstand1
         socketio.emit('B2F_verstuur_data_JSN1', {
                       'AfstandJSN1': status}, broadcast=True)
-        print('Verstuurd ***JSN2*** data')
+        # print('Verstuurd ***JSN2*** data')
         status = waardeAfstand2
         socketio.emit('B2F_verstuur_data_JSN2', {
                       'AfstandJSN2': status}, broadcast=True)
-        print('Verstuurd ***JSN3*** data')
+        # print('Verstuurd ***JSN3*** data')
         status = waardeAfstand3
         socketio.emit('B2F_verstuur_data_JSN3', {
                       'AfstandJSN3': status}, broadcast=True)
-        print('Verstuurd ***JSN4*** data')
+        # print('Verstuurd ***JSN4*** data')
         status = waardeAfstand4
         socketio.emit('B2F_verstuur_data_JSN4', {
                       'AfstandJSN4': status}, broadcast=True)
 
-        print('Verstuurd ***SPEED*** data')
+        # print('Verstuurd ***SPEED*** data')
         status = waardeSpeedSensor
         socketio.emit('B2F_verstuur_data_speed', {
                       'speed': status}, broadcast=True)
@@ -462,8 +462,8 @@ def send_data_fast():
         time.sleep(1)
 
 
-# send_data_fast_thread = threading.Timer(0.5, send_data_fast)
-# send_data_fast_thread.start()
+send_data_fast_thread = threading.Timer(1, send_data_fast)
+send_data_fast_thread.start()
 
 
 @ app.route(endpoint + '/historiek', methods=['GET', 'POST'])
