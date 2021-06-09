@@ -503,12 +503,13 @@ def main():
                 if lelteller == 50:
                     LCD.nieuwe_lijn()
                     stuur1 = f"{str(temperatuur)[0:5]}"
-                    stuur2 = "°"
+                    stuur2 = "*"
                     stuur3 = "C"
                     stuur4 = "     "
                     stuur5 = f"{waardeLDR}%"
                     LCD.stuur_letters(stuur1)
                     LCD.send_character(ord(stuur2))
+                    # LCD.stuur_letters(stuur2)
                     LCD.stuur_letters(stuur3)
                     LCD.stuur_letters(stuur4)
                     LCD.stuur_letters(stuur5)
