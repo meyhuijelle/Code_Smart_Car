@@ -234,7 +234,7 @@ GPIO.add_event_detect(button, GPIO.RISING,
 # GPIO.add_event_detect(speedSensor, GPIO.RISING, callback=get_rpm)
 
 GPIO.add_event_detect(buttonIP, GPIO.RISING,
-                      callback=callback_IP, bouncetime=200)
+                      callback=callback_IP, bouncetime=1000)
 
 poort = Serial('/dev/serial0', 9600, bytesize=8,
                parity=PARITY_NONE, stopbits=1)
