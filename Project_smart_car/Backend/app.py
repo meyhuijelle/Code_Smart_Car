@@ -330,8 +330,8 @@ def get_data_serieel():
         DataRepository.create_historiek(
             3, 2, '2017-05-31 19:19:09', waardeLDR, "Dit is voorbeeldcommentaar ")
 
-        # DataRepository.create_historiek(
-        #     7, 3, '2017-05-31 19:19:09', temperatuur[0:5], "Dit is temperatuurdata")
+        DataRepository.create_historiek(
+            7, 3, '2017-05-31 19:19:09', temperatuur[0:5], "Dit is temperatuurdata")
 
         time.sleep(0.005)
 
@@ -383,8 +383,8 @@ def buzzer1():
             #     "444444444444444444444444444444444444444444444444444444444444444444444444444")
 
 
-thread_buzzer1 = threading.Timer(1, buzzer1)
-thread_buzzer1.start()
+# thread_buzzer1 = threading.Timer(1, buzzer1)
+# thread_buzzer1.start()
 
 
 # ***LDR***
@@ -406,7 +406,7 @@ def hallo():
     return "Server is running, er zijn momenteel geen API endpoints beschikbaar."
 
 
-@ socketio.on('connect')
+@socketio.on('connect')
 def initial_connection():
     print('A new client connect')
     status = waardeLDR
