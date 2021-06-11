@@ -1,10 +1,11 @@
 from io import StringIO
-from os import getegid, truncate
+from os import getegid, stat, truncate
 import re
 import time
 from RPi import GPIO
 from flask.globals import request
 from flask.wrappers import Request
+from flask_cors.core import CONFIG_OPTIONS
 from helpers.klasseknop import Button
 import threading
 from serial import Serial, PARITY_NONE
@@ -58,9 +59,14 @@ vorige_snelheid = 0
 # state_LED1 = False
 # state_LED2 = False
 state_LEDs = False
+vorige_state_leds = False
+status_for_front = False
 
 counterButton = 0
 
+# state = False
+
+buzzerState = False
 
 # Code voor Hardware
 GPIO.setwarnings(False)
@@ -349,46 +355,48 @@ thread.start()
 
 
 def buzzer1():
+    global buzzerState
     # buzzer = GPIO.PWM(triggerPIN, 100)
     while True:
-        if (int(waardeAfstand1) == -1 and int(waardeAfstand2) == -1 and int(waardeAfstand3) == -1 and int(waardeAfstand4) == -1):
-            buzzer.stop()
-        elif(int(waardeAfstand1) == 0 or int(waardeAfstand2) == 0 or int(waardeAfstand3) == 0 or int(waardeAfstand4) == 0):
-            buzzer.start(10)
-            time.sleep(0.05)
-            buzzer.ChangeFrequency(100)
-            # time.sleep(0.5)
-            buzzer.stop()
-            time.sleep(0.05)
-            # print("11111111111111111111111111111111111111111111111111111111111111111")
+        if buzzerState == True:
+            if (int(waardeAfstand1) == -1 and int(waardeAfstand2) == -1 and int(waardeAfstand3) == -1 and int(waardeAfstand4) == -1):
+                buzzer.stop()
+            elif(int(waardeAfstand1) == 0 or int(waardeAfstand2) == 0 or int(waardeAfstand3) == 0 or int(waardeAfstand4) == 0):
+                buzzer.start(10)
+                time.sleep(0.05)
+                buzzer.ChangeFrequency(100)
+                # time.sleep(0.5)
+                buzzer.stop()
+                time.sleep(0.05)
+                # print("11111111111111111111111111111111111111111111111111111111111111111")
 
-        elif (int(waardeAfstand1) > 0 and int(waardeAfstand1) <= 30 or int(waardeAfstand2) > 0 and int(waardeAfstand2) <= 30 or int(waardeAfstand3) > 0 and int(waardeAfstand3) <= 30 or int(waardeAfstand4) > 0 and int(waardeAfstand4) <= 30):
-            buzzer.start(10)
-            time.sleep(0.1)
-            buzzer.ChangeFrequency(100)
-            # time.sleep(0.5)
-            buzzer.stop()
-            time.sleep(0.1)
-            # print("222222222222222222222222222222222222222222222222222222222222222")
+            elif (int(waardeAfstand1) > 0 and int(waardeAfstand1) <= 30 or int(waardeAfstand2) > 0 and int(waardeAfstand2) <= 30 or int(waardeAfstand3) > 0 and int(waardeAfstand3) <= 30 or int(waardeAfstand4) > 0 and int(waardeAfstand4) <= 30):
+                buzzer.start(10)
+                time.sleep(0.1)
+                buzzer.ChangeFrequency(100)
+                # time.sleep(0.5)
+                buzzer.stop()
+                time.sleep(0.1)
+                # print("222222222222222222222222222222222222222222222222222222222222222")
 
-        elif (int(waardeAfstand1) > 0 and int(waardeAfstand1) <= 50 or int(waardeAfstand2) > 0 and int(waardeAfstand2) <= 50 or int(waardeAfstand3) > 0 and int(waardeAfstand3) <= 50 or int(waardeAfstand4) > 0 and int(waardeAfstand4) <= 50):
-            buzzer.start(10)
-            time.sleep(0.15)
-            buzzer.ChangeFrequency(100)
-            # time.sleep(0.5)
-            buzzer.stop()
-            time.sleep(0.15)
-            # print(
-            #     "33333333333333333333333333333333333333333333333333333333333333333333333333333")
-        elif (int(waardeAfstand1) > 50 or int(waardeAfstand2) > 50 or int(waardeAfstand3) > 50 or int(waardeAfstand4) > 50):
-            buzzer.start(10)
-            time.sleep(0.20)
-            buzzer.ChangeFrequency(100)
-            # time.sleep(0.5)
-            buzzer.stop()
-            time.sleep(0.20)
-            # print(
-            #     "444444444444444444444444444444444444444444444444444444444444444444444444444")
+            elif (int(waardeAfstand1) > 0 and int(waardeAfstand1) <= 50 or int(waardeAfstand2) > 0 and int(waardeAfstand2) <= 50 or int(waardeAfstand3) > 0 and int(waardeAfstand3) <= 50 or int(waardeAfstand4) > 0 and int(waardeAfstand4) <= 50):
+                buzzer.start(10)
+                time.sleep(0.15)
+                buzzer.ChangeFrequency(100)
+                # time.sleep(0.5)
+                buzzer.stop()
+                time.sleep(0.15)
+                # print(
+                #     "33333333333333333333333333333333333333333333333333333333333333333333333333333")
+            elif (int(waardeAfstand1) > 50 or int(waardeAfstand2) > 50 or int(waardeAfstand3) > 50 or int(waardeAfstand4) > 50):
+                buzzer.start(10)
+                time.sleep(0.20)
+                buzzer.ChangeFrequency(100)
+                # time.sleep(0.5)
+                buzzer.stop()
+                time.sleep(0.20)
+                # print(
+                #     "444444444444444444444444444444444444444444444444444444444444444444444444444")
 
 
 thread_buzzer1 = threading.Timer(1, buzzer1)
@@ -422,6 +430,56 @@ def initial_connection():
 
 
 is_sending = True
+
+
+@socketio.on('F2B_stateLights')
+def changeStateLights(msg):
+    global state_LEDs
+    # global state_LED_
+    # print(state_LEDs)
+    print(msg.get('stateLights'))
+
+    if(msg.get('stateLights') == "True"):
+        state_LEDs = True
+    elif(msg.get('stateLights') == "False"):
+        state_LEDs = False
+
+    # print(f"fddsqfdsf{state}")
+
+    # state_LEDs = state
+
+
+@socketio.on('F2B_stateBuzzer')
+def changeStateBuzzer(msg):
+    global buzzerState
+    print(msg.get('stateBuzzer'))
+    if(msg.get('stateBuzzer') == "True"):
+        buzzerState = True
+    elif(msg.get('stateBuzzer') == "False"):
+        buzzerState = False
+
+    print(f"Dit is nu de state van de buzzer {buzzerState}")
+
+    # buzzer1()
+
+
+# @socketio.on('B2F_state_with_button')
+# def send_state():
+
+
+# socketio.emit('B2F_state_with_button', {
+#     'state': state_LEDs}, broadcast=True)
+
+# socketio.emit('B2F_state_with_button', {
+#               'state': state_LEDs}, broadcast=True)
+# print(bool(msg.get('state')))
+# state_LEDs = bool(msg.get('state'))
+# print(state_LEDs)
+
+# if state_LEDs == True:
+#     GPIO.output(led, 1)
+# elif state_LEDs == False:
+#     GPIO.output(led, 0)
 
 
 def send_data():
@@ -510,14 +568,35 @@ def get_historiek():
 def main():
     global send_LCD
     global temperatuur
+    global vorige_state_leds
+    global status_for_front
     lelteller = 50
     # LCD.init_LCD()
     try:
         while True:
+
             if state_LEDs == True:
                 GPIO.output(led, 1)
+                status_for_front = 1
             elif state_LEDs == False:
                 GPIO.output(led, 0)
+                status_for_front = 2
+
+            # print(f" leeeeeed {state_LEDs}")
+            # print(f" leeeeeedvorig {vorige_state_leds}")
+
+            if(state_LEDs != vorige_state_leds):
+                socketio.emit('B2F_state_with_button', {
+                    'state': status_for_front}, broadcast=True)
+
+            # print('jaaa')
+            # print(state_LEDs)
+            # print(vorige_state_leds)
+            # socketio.emit('B2F_state_with_button', {
+            #     'state': state_LEDs}, broadcast=True)
+
+            # if state_LEDs != vorige_state_leds:
+
             # print(f"temp {str(temperatuur)[0:5]}")
             # code_voor_callback()
             # print(lelteller)
@@ -562,7 +641,7 @@ def main():
                 # LCD.stuur_letters("   ")
             else:
                 send_LCD = False
-
+            vorige_state_leds = state_LEDs
             time.sleep(0.1)
 
     except KeyboardInterrupt as e:
@@ -576,6 +655,7 @@ def main():
 
 main_thread = threading.Timer(3, main)
 main_thread.start()
+
 
 # # ANDERE FUNCTIES
 if __name__ == '__main__':

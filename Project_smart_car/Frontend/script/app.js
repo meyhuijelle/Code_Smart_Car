@@ -158,7 +158,7 @@ const listenToUI = function () {
       
       if(tellerBuzzer == 1){
           // console.log(buttonONOFF.classList)
-          htmlString1 = `<div class="c-button c-button__clicked">
+          htmlString1 = `<div class="c-button c-button__clicked js-statebuzzer" state="True">
           <div>
           <svg id="volume_up_black_24dp" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
           <path id="Path_16" data-name="Path 16" d="M0,0H24V24H0Z" fill="none"/>
@@ -174,7 +174,7 @@ const listenToUI = function () {
       </div>`
       }else{
         htmlString1 = `
-        <div class="c-button">
+        <div class="c-button js-statebuzzer" state="False">
           <div>
               <svg id="volume_off_black_24dp_1_" data-name="volume_off_black_24dp (1)" xmlns="http://www.w3.org/2000/svg" width="24" height="24"
                   viewBox="0 0 24 24">
@@ -194,12 +194,18 @@ const listenToUI = function () {
 
       }
       buttonbuzzerONOFF.innerHTML = htmlString1;
+
+      const state = document.querySelector('.js-statebuzzer')
+      const value = state.getAttribute('state')
+      console.log(value)
+      socket.emit('F2B_stateBuzzer', {stateBuzzer: state.getAttribute('state')});
     })
     
     
 
   
     const buttonLightsONOFF = document.querySelector('.js-buttonLightsONOFF');
+    
     let htmlString2 = ""
     buttonLightsONOFF.addEventListener('click', function(){
       console.log('Er is op me gedrukt!')
@@ -210,7 +216,7 @@ const listenToUI = function () {
       
       if(tellerLights == 1){
           // console.log(buttonONOFF.classList)
-          htmlString2 = `<div class="c-button c-button__clicked js-buttonONOFF">
+          htmlString2 = `<div class="c-button c-button__clicked js-buttonLightsONOFF js-stateLights" state="True">
         <div>
            
 
@@ -236,7 +242,7 @@ const listenToUI = function () {
     </div>`
       }else{
         htmlString2 = `
-        <div class="c-button js-buttonONOFF">
+        <div class="c-button js-buttonLightsONOFF js-stateLights" state="False">
         <div>
         <svg id="lightbulb_black_24dp" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
                 <path id="Path_18" data-name="Path 18" d="M0,0H24V24H0Z" fill="none" />
@@ -254,6 +260,60 @@ const listenToUI = function () {
 
       }
       buttonLightsONOFF.innerHTML = htmlString2;
+      const state = document.querySelector('.js-stateLights')
+      const value = state.getAttribute('state')
+      console.log(value)
+      socket.emit('F2B_stateLights', {stateLights: state.getAttribute('state')});
+
+      
+  //       if(value == false && jsonObject.state == "True"){
+  //         htmlString2 = `<div class="c-button c-button__clicked js-buttonLightsONOFF js-state" state="True">
+  //       <div>
+           
+
+  //           <svg xmlns="http://www.w3.org/2000/svg" width="31.591" height="24" viewBox="0 0 31.591 24">
+  //       <g id="Group_484" data-name="Group 484" transform="translate(-262.046 -543)">
+  //         <g id="lightbulb_black_24dp" transform="translate(266 543)">
+  //           <path id="Path_18" data-name="Path 18" d="M0,0H24V24H0Z" fill="none"/>
+  //           <path id="Path_19" data-name="Path 19" d="M9,21a1,1,0,0,0,1,1h4a1,1,0,0,0,1-1V20H9ZM12,2A6.957,6.957,0,0,0,5,9a6.827,6.827,0,0,0,3,5.7V17a1,1,0,0,0,1,1h6a1,1,0,0,0,1-1V14.7A7.1,7.1,0,0,0,19,9,6.957,6.957,0,0,0,12,2Z" fill="#4d00b3"/>
+  //         </g>
+  //         <line id="Line_15" data-name="Line 15" y1="2" x2="6" transform="translate(286.5 545.5)" fill="none" stroke="#707070" stroke-width="1"/>
+  //         <line id="Line_16" data-name="Line 16" x2="4" transform="translate(287 552)" fill="none" stroke="#707070" stroke-width="1"/>
+  //         <line id="Line_17" data-name="Line 17" x2="7" y2="2" transform="translate(286.5 555.5)" fill="none" stroke="#707070" stroke-width="1"/>
+  //         <line id="Line_18" data-name="Line 18" x1="5.303" y1="2" transform="translate(263.197 545.5)" fill="none" stroke="#707070" stroke-width="1"/>
+  //         <line id="Line_19" data-name="Line 19" x1="4" transform="translate(264 552)" fill="none" stroke="#707070" stroke-width="1"/>
+  //         <line id="Line_20" data-name="Line 20" x1="6.303" y2="2" transform="translate(262.197 555.5)" fill="none" stroke="#707070" stroke-width="1"/>
+  //       </g>
+  //     </svg>
+
+  //       </div>
+  //       <div>
+  //           <p class="c-text__layout-btn u-mb-clear">HEADLIGHTS <u>ON</u>/OFF</u></p>
+  //       </div>
+  //   </div>`
+  //       }else if(value == true && jsonObject.state == "False"){
+  //         htmlString2 = `
+  //       <div class="c-button js-buttonLightsONOFF js-state" state="False">
+  //       <div>
+  //       <svg id="lightbulb_black_24dp" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+  //               <path id="Path_18" data-name="Path 18" d="M0,0H24V24H0Z" fill="none" />
+  //               <path id="Path_19" data-name="Path 19"
+  //                   d="M9,21a1,1,0,0,0,1,1h4a1,1,0,0,0,1-1V20H9ZM12,2A6.957,6.957,0,0,0,5,9a6.827,6.827,0,0,0,3,5.7V17a1,1,0,0,0,1,1h6a1,1,0,0,0,1-1V14.7A7.1,7.1,0,0,0,19,9,6.957,6.957,0,0,0,12,2Z" />
+  //           </svg>
+      
+  //       </div>
+  //       <div>
+  //           <p class="c-text__layout-btn u-mb-clear">HEADLIGHTS ON/<u>OFF</u></p>
+  //       </div>
+  //   </div>
+  // `
+  //       }
+
+       
+
+   
+      buttonLightsONOFF.innerHTML = htmlString2;
+
     })
 
       
@@ -364,7 +424,72 @@ const listenToSocket = function () {
       console.log(jsonObject)
       document.querySelector('.js-speed').innerHTML = `${jsonObject.speed} km/h`
     })
-  }
+
+    socket.on("B2F_state_with_button", function (jsonObject) {
+      // console.log(jsonObject.state);
+
+      const buttonLightsONOFF = document.querySelector('.js-buttonLightsONOFF');
+    
+      let htmlString2 = ""
+     
+      console.log(tellerLights)
+
+      tellerLights = jsonObject.state
+
+      console.log(tellerLights)
+      
+      if(tellerLights == 1){
+          // console.log(buttonONOFF.classList)
+          htmlString2 = `<div class="c-button c-button__clicked js-buttonLightsONOFF js-stateLights" state="True">
+        <div>
+          
+
+            <svg xmlns="http://www.w3.org/2000/svg" width="31.591" height="24" viewBox="0 0 31.591 24">
+        <g id="Group_484" data-name="Group 484" transform="translate(-262.046 -543)">
+          <g id="lightbulb_black_24dp" transform="translate(266 543)">
+            <path id="Path_18" data-name="Path 18" d="M0,0H24V24H0Z" fill="none"/>
+            <path id="Path_19" data-name="Path 19" d="M9,21a1,1,0,0,0,1,1h4a1,1,0,0,0,1-1V20H9ZM12,2A6.957,6.957,0,0,0,5,9a6.827,6.827,0,0,0,3,5.7V17a1,1,0,0,0,1,1h6a1,1,0,0,0,1-1V14.7A7.1,7.1,0,0,0,19,9,6.957,6.957,0,0,0,12,2Z" fill="#4d00b3"/>
+          </g>
+          <line id="Line_15" data-name="Line 15" y1="2" x2="6" transform="translate(286.5 545.5)" fill="none" stroke="#707070" stroke-width="1"/>
+          <line id="Line_16" data-name="Line 16" x2="4" transform="translate(287 552)" fill="none" stroke="#707070" stroke-width="1"/>
+          <line id="Line_17" data-name="Line 17" x2="7" y2="2" transform="translate(286.5 555.5)" fill="none" stroke="#707070" stroke-width="1"/>
+          <line id="Line_18" data-name="Line 18" x1="5.303" y1="2" transform="translate(263.197 545.5)" fill="none" stroke="#707070" stroke-width="1"/>
+          <line id="Line_19" data-name="Line 19" x1="4" transform="translate(264 552)" fill="none" stroke="#707070" stroke-width="1"/>
+          <line id="Line_20" data-name="Line 20" x1="6.303" y2="2" transform="translate(262.197 555.5)" fill="none" stroke="#707070" stroke-width="1"/>
+        </g>
+      </svg>
+
+        </div>
+        <div>
+            <p class="c-text__layout-btn u-mb-clear">HEADLIGHTS <u>ON</u>/OFF</u></p>
+        </div>
+    </div>`
+      }else{
+        htmlString2 = `
+        <div class="c-button js-buttonLightsONOFF js-stateLights" state="False">
+        <div>
+        <svg id="lightbulb_black_24dp" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+                <path id="Path_18" data-name="Path 18" d="M0,0H24V24H0Z" fill="none" />
+                <path id="Path_19" data-name="Path 19"
+                    d="M9,21a1,1,0,0,0,1,1h4a1,1,0,0,0,1-1V20H9ZM12,2A6.957,6.957,0,0,0,5,9a6.827,6.827,0,0,0,3,5.7V17a1,1,0,0,0,1,1h6a1,1,0,0,0,1-1V14.7A7.1,7.1,0,0,0,19,9,6.957,6.957,0,0,0,12,2Z" />
+            </svg>
+      
+        </div>
+        <div>
+            <p class="c-text__layout-btn u-mb-clear">HEADLIGHTS ON/<u>OFF</u></p>
+        </div>
+    </div>
+  `
+    tellerLights = 0
+
+        }
+        buttonLightsONOFF.innerHTML = htmlString2;
+
+
+
+      });
+  
+}
   else if(htmlParkSens){    
     socket.on('B2F_verstuur_data_JSN1', function(jsonObject){
     console.log(jsonObject)
