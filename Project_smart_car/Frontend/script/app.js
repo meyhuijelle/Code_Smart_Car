@@ -6,6 +6,10 @@ visual4_top, visual1_bottom, visual2_bottom, visual3_bottom,visual4_bottom, visu
 visual2_right, visual3_right, visual4_right, visual1_left, visual2_left, visual3_left, 
 visual4_left,htmlHistory;
 
+let tellerLights = 0;
+let tellerBuzzer = 0;
+let tellerONOFF = 0;
+
 
 
 
@@ -21,22 +25,42 @@ const showHistoriek = function(jsonObject){
   <th>commentary</th>
 </thead>`
 // let htmlString = `` 
+  let index = 0
   const placeholder = document.querySelector('.js-history')
+  
   for(historiek of jsonObject.historiek){
     console.log(historiek)
+    index ++
+    if(index % 2 == 0){
+      htmlString +=
+      ` <tbody>
+      <tr class="even">
+          <td data-label="historyID">${historiek.HistoriekID}</td>
+          <td data-label="deviceID">${historiek.DeviceID}</td>
+          <td data-label="actionID">${historiek.ActieID}</td>
+          <td data-label="actdate">${historiek.Actiedatum}</td>
+          <td data-label="value">${historiek.Waarde}</td>
+          <td data-label="commentary">${historiek.Commentaar}</td>
+      </tr>
+     
+  </tbody>`
+    }else{
+      htmlString +=
+      ` <tbody>
+      <tr class="odd">
+          <td data-label="historyID">${historiek.HistoriekID}</td>
+          <td data-label="deviceID">${historiek.DeviceID}</td>
+          <td data-label="actionID">${historiek.ActieID}</td>
+          <td data-label="actdate">${historiek.Actiedatum}</td>
+          <td data-label="value">${historiek.Waarde}</td>
+          <td data-label="commentary">${historiek.Commentaar}</td>
+      </tr>
+     
+  </tbody>`
+    }
+    
     // htmlString += `<li class="js-historiek_option">ID: ${historiek.ActieID} ActieDatum: ${historiek.Actiedatum} kies</li>`
-    htmlString +=
-    ` <tbody>
-    <tr>
-        <td data-label="historyID">${historiek.HistoriekID}</td>
-        <td data-label="deviceID">${historiek.DeviceID}</td>
-        <td data-label="actionID">${historiek.ActieID}</td>
-        <td data-label="actdate">${historiek.Actiedatum}</td>
-        <td data-label="value">${historiek.Waarde}</td>
-        <td data-label="commentary">${historiek.Commentaar}</td>
-    </tr>
-   
-</tbody>`
+
 
     
   }
@@ -122,6 +146,168 @@ const listenToUI = function () {
       console.log('***parkingSens*** button pushed!')
       window.location.href = 'parkingSens.html'
     })
+
+    const buttonbuzzerONOFF = document.querySelector('.js-buttonBuzzerONOFF');
+    let htmlString1 = ""
+    buttonbuzzerONOFF.addEventListener('click', function(){
+      console.log('Er is op me gedrukt!')
+
+      tellerBuzzer++
+
+      console.log(tellerBuzzer)
+      
+      if(tellerBuzzer == 1){
+          // console.log(buttonONOFF.classList)
+          htmlString1 = `<div class="c-button c-button__clicked">
+          <div>
+          <svg id="volume_up_black_24dp" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+          <path id="Path_16" data-name="Path 16" d="M0,0H24V24H0Z" fill="none"/>
+          <path id="Path_17" data-name="Path 17" d="M3,9v6H7l5,5V4L7,9Zm13.5,3A4.5,4.5,0,0,0,14,7.97v8.05A4.474,4.474,0,0,0,16.5,12ZM14,3.23V5.29a7,7,0,0,1,0,13.42v2.06A8.994,8.994,0,0,0,14,3.23Z" fill="#4d00b3"/>
+        </svg>
+        
+
+          </div>
+          <div>
+              <p class="u-mb-clear">BUZZER</p>
+              <p class="u-mb-clear"><u>ON</u>/OFF</u></p>
+          </div>
+      </div>`
+      }else{
+        htmlString1 = `
+        <div class="c-button">
+          <div>
+              <svg id="volume_off_black_24dp_1_" data-name="volume_off_black_24dp (1)" xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                  viewBox="0 0 24 24">
+                  <path id="Path_30" data-name="Path 30" d="M0,0H24V24H0Z" fill="none" />
+                  <path id="Path_31" data-name="Path 31"
+                      d="M16.5,12A4.5,4.5,0,0,0,14,7.97v2.21l2.45,2.45A4.232,4.232,0,0,0,16.5,12ZM19,12a6.843,6.843,0,0,1-.54,2.64l1.51,1.51A8.8,8.8,0,0,0,21,12a9,9,0,0,0-7-8.77V5.29A7.005,7.005,0,0,1,19,12ZM4.27,3,3,4.27,7.73,9H3v6H7l5,5V13.27l4.25,4.25A6.924,6.924,0,0,1,14,18.7v2.06a8.99,8.99,0,0,0,3.69-1.81L19.73,21,21,19.73l-9-9ZM12,4,9.91,6.09,12,8.18Z" />
+              </svg>
+
+          </div>
+          <div>
+              <p class="u-mb-clear">BUZZER</p>
+              <p class="u-mb-clear"> ON/<u>OFF</u></p>
+          </div>
+      </div>
+  `
+  tellerBuzzer = 0
+
+      }
+      buttonbuzzerONOFF.innerHTML = htmlString1;
+    })
+    
+    
+
+  
+    const buttonLightsONOFF = document.querySelector('.js-buttonLightsONOFF');
+    let htmlString2 = ""
+    buttonLightsONOFF.addEventListener('click', function(){
+      console.log('Er is op me gedrukt!')
+
+      tellerLights++
+
+      console.log(tellerLights)
+      
+      if(tellerLights == 1){
+          // console.log(buttonONOFF.classList)
+          htmlString2 = `<div class="c-button c-button__clicked js-buttonONOFF">
+        <div>
+           
+
+            <svg xmlns="http://www.w3.org/2000/svg" width="31.591" height="24" viewBox="0 0 31.591 24">
+        <g id="Group_484" data-name="Group 484" transform="translate(-262.046 -543)">
+          <g id="lightbulb_black_24dp" transform="translate(266 543)">
+            <path id="Path_18" data-name="Path 18" d="M0,0H24V24H0Z" fill="none"/>
+            <path id="Path_19" data-name="Path 19" d="M9,21a1,1,0,0,0,1,1h4a1,1,0,0,0,1-1V20H9ZM12,2A6.957,6.957,0,0,0,5,9a6.827,6.827,0,0,0,3,5.7V17a1,1,0,0,0,1,1h6a1,1,0,0,0,1-1V14.7A7.1,7.1,0,0,0,19,9,6.957,6.957,0,0,0,12,2Z" fill="#4d00b3"/>
+          </g>
+          <line id="Line_15" data-name="Line 15" y1="2" x2="6" transform="translate(286.5 545.5)" fill="none" stroke="#707070" stroke-width="1"/>
+          <line id="Line_16" data-name="Line 16" x2="4" transform="translate(287 552)" fill="none" stroke="#707070" stroke-width="1"/>
+          <line id="Line_17" data-name="Line 17" x2="7" y2="2" transform="translate(286.5 555.5)" fill="none" stroke="#707070" stroke-width="1"/>
+          <line id="Line_18" data-name="Line 18" x1="5.303" y1="2" transform="translate(263.197 545.5)" fill="none" stroke="#707070" stroke-width="1"/>
+          <line id="Line_19" data-name="Line 19" x1="4" transform="translate(264 552)" fill="none" stroke="#707070" stroke-width="1"/>
+          <line id="Line_20" data-name="Line 20" x1="6.303" y2="2" transform="translate(262.197 555.5)" fill="none" stroke="#707070" stroke-width="1"/>
+        </g>
+      </svg>
+
+        </div>
+        <div>
+            <p class="c-text__layout-btn u-mb-clear">HEADLIGHTS <u>ON</u>/OFF</u></p>
+        </div>
+    </div>`
+      }else{
+        htmlString2 = `
+        <div class="c-button js-buttonONOFF">
+        <div>
+        <svg id="lightbulb_black_24dp" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+                <path id="Path_18" data-name="Path 18" d="M0,0H24V24H0Z" fill="none" />
+                <path id="Path_19" data-name="Path 19"
+                    d="M9,21a1,1,0,0,0,1,1h4a1,1,0,0,0,1-1V20H9ZM12,2A6.957,6.957,0,0,0,5,9a6.827,6.827,0,0,0,3,5.7V17a1,1,0,0,0,1,1h6a1,1,0,0,0,1-1V14.7A7.1,7.1,0,0,0,19,9,6.957,6.957,0,0,0,12,2Z" />
+            </svg>
+      
+        </div>
+        <div>
+            <p class="c-text__layout-btn u-mb-clear">HEADLIGHTS ON/<u>OFF</u></p>
+        </div>
+    </div>
+  `
+  tellerLights = 0
+
+      }
+      buttonLightsONOFF.innerHTML = htmlString2;
+    })
+
+      
+    const buttonONOFF = document.querySelector('.js-buttonONOFF');
+    let htmlString3 = ""
+    buttonONOFF.addEventListener('click', function(){
+      console.log('Er is op me gedrukt!')
+
+      tellerONOFF++
+
+      console.log(tellerONOFF)
+      
+      if(tellerONOFF == 1){
+          // console.log(buttonONOFF.classList)
+          htmlString3 = `<div class="c-button">
+          <div>
+          <svg id="power_settings_new_black_24dp" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+          <path id="Path_10" data-name="Path 10" d="M0,0H24V24H0Z" fill="none"/>
+          <path id="Path_11" data-name="Path 11" d="M13,3H11V13h2Zm4.83,2.17L16.41,6.59A6.92,6.92,0,0,1,19,12,7,7,0,1,1,7.58,6.58L6.17,5.17A8.992,8.992,0,1,0,21,12,8.932,8.932,0,0,0,17.83,5.17Z"/>
+        </svg>
+        
+
+
+          </div>
+          <div>
+              <p class="c-text__layout-btn u-mb-clear">APPLICATION ON/<u>OFF</u></p>
+          </div>
+      </div>`
+      }else{
+        htmlString3 = `
+        <div class="c-button c-button__clicked">
+        <div>
+            <svg id="power_settings_new_black_24dp" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+                <path id="Path_10" data-name="Path 10" d="M0,0H24V24H0Z" fill="none" />
+                <path id="Path_11" data-name="Path 11"
+                    d="M13,3H11V13h2Zm4.83,2.17L16.41,6.59A6.92,6.92,0,0,1,19,12,7,7,0,1,1,7.58,6.58L6.17,5.17A8.992,8.992,0,1,0,21,12,8.932,8.932,0,0,0,17.83,5.17Z"
+                    fill="#4d00b3" />
+            </svg>
+
+
+        </div>
+        <div>
+            <p class="c-text__layout-btn u-mb-clear">APPLICATION <u>ON</u>/OFF</p>
+        </div>
+    </div>
+  `
+  tellerONOFF = 0
+
+      }
+      buttonONOFF.innerHTML = htmlString3;
+    })
+
+  
+    
     }
 
     if(htmlInfo){
@@ -152,11 +338,7 @@ const listenToUI = function () {
     })
    
     
-
-  
-
-  
-  } 
+} 
 
   
 

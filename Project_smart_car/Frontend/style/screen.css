@@ -498,8 +498,8 @@ a:focus {
 
 @media(max-width: 320px){
   .c-lead--md{
-    font-size: 14px ; 
-    line-height: 16px ;
+    font-size: 18px ; 
+    line-height: 27px ;
   }
 }
 
@@ -697,8 +697,8 @@ a:focus {
 }
 
 .c-logo__symbol {
- width: 50px;
- height: 50px;
+ width: 56px;
+ height: 56px;
 }
 
 .c-logo__name {
@@ -888,7 +888,7 @@ a:focus {
   }
 }
 
-@media(min-width: 390px){
+@media(min-width: 450px){
   .c-lead--md{
     font-size: 32px;
     line-height: 48px;
@@ -1042,6 +1042,15 @@ a:focus {
   height: 100%; */
 
 }
+
+.c-button__clicked{
+  background-color: #F2F2F2;
+  color: #4D00B3;
+  border: 1px solid #4D00B3;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.10);;
+}
+
+
 
 .c-text__layout-btn{
   text-align: center;
@@ -1414,14 +1423,14 @@ th, td{
 caption{
   text-align: left;
 }
-
+/* 
 tr:nth-child(even){
   background-color: white;
 }
 
 tr:nth-child(odd){
   background-color: #ddd;
-}
+} */
 
 .table{
   width: 100%;
@@ -1441,7 +1450,7 @@ tr:nth-child(odd){
   color: #fff;
 
 }
-
+/* 
 .table tbody tr:nth-child(even){
   background-color: #f5f5f5;
 
@@ -1450,15 +1459,15 @@ tr:nth-child(odd){
 .table tbody tr:nth-child(odd){
   background-color: white;
 
-}
+} */
 
-/* .even{
-  background-color: #f5f5f5;
+.even{
+  background-color: #f5f5f5 !important;
 }
 
 .odd{
-  background-color:white;
-} */
+  background-color:white !important;
+}
 
 /*responsive table*/
 
@@ -1492,6 +1501,9 @@ tr:nth-child(odd){
   }
 }
 
+.c-buttonONOFF{
+  align-self: flex-end;
+}
 
 
 /*------------------------------------*\
