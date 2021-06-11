@@ -97,46 +97,51 @@ def RPM_TO_KMH(value_RPM):
     return (0.1885 * value_RPM) * 0.25
 
 
-# def get_rpm(c):
-#     global KMH
-#     global vorige_starttijd
-#     global rps
-#     global rpm
-#     global vorige_snelheid
+def get_rpm(c):
+    global KMH
+    global vorige_starttijd
+    global rps
+    global rpm
+    global vorige_snelheid
 
-#     start_timer = int(round(time.time() * 1000))
+    start_timer = int(round(time.time() * 1000))
 
-#     tijd = start_timer - vorige_starttijd
-#     if (tijd != 0):
-#         rps = (1000/tijd)/20
-#         rpm = rps * 60
-#         KMH = RPM_TO_KMH(rpm)
-#         # if(counterButton == 2):
-#         #     LCD.stuur_letters(str(round(KMH)))
-#         #     LCD.init_LCD()
-#     else:
-#         print('verkeerde meting!')
+    tijd = start_timer - vorige_starttijd
+    if (tijd != 0):
+        rps = (1000/tijd)/20
+        rpm = rps * 60
+        KMH = RPM_TO_KMH(rpm)
+        # if(counterButton == 2):
+        #     LCD.stuur_letters(str(round(KMH)))
+        #     LCD.init_LCD()
+    else:
+        print('verkeerde meting!')
 
-#     vorige_starttijd = start_timer
+    vorige_starttijd = start_timer
 
-#     if(KMH != vorige_snelheid):
-#         print(f"{round(KMH)} km/h----------------------------------------")
-#         # while(counterButton == 2):
-#         #     LCD.stuur_letters(str(round(KMH)))
-#         #     LCD.init_LCD()
-#         #     time.sleep(0.5)
+    print('Verstuurd ***SPEED*** data')
+    status = round(KMH)
+    socketio.emit('B2F_verstuur_data_speed', {
+        'speed': status}, broadcast=True)
 
-#     if(KMH >= 5 and KMH <= 10):
-#         # print("beennnnneeeer")
-#         pwm.ChangeDutyCycle(25)
-#     elif (KMH >= 11 and KMH <= 20):
-#         pwm.ChangeDutyCycle(50)
-#     elif (KMH >= 21 and KMH <= 30):
-#         pwm.ChangeDutyCycle(75)
-#     else:
-#         pwm.ChangeDutyCycle(1)
+    if(KMH != vorige_snelheid):
+        print(f"{round(KMH)} km/h----------------------------------------")
+        # while(counterButton == 2):
+        #     LCD.stuur_letters(str(round(KMH)))
+        #     LCD.init_LCD()
+        #     time.sleep(0.5)
 
-#     vorige_snelheid = KMH
+    if(KMH >= 5 and KMH <= 10):
+        # print("beennnnneeeer")
+        pwm.ChangeDutyCycle(25)
+    elif (KMH >= 11 and KMH <= 20):
+        pwm.ChangeDutyCycle(50)
+    elif (KMH >= 21 and KMH <= 30):
+        pwm.ChangeDutyCycle(75)
+    else:
+        pwm.ChangeDutyCycle(1)
+
+    vorige_snelheid = KMH
 
 
 def switch_state_lights(btn):
@@ -231,7 +236,7 @@ def code_voor_callback():
 GPIO.add_event_detect(button, GPIO.RISING,
                       callback=switch_state_lights, bouncetime=200)
 
-# GPIO.add_event_detect(speedSensor, GPIO.RISING, callback=get_rpm)
+GPIO.add_event_detect(speedSensor, GPIO.RISING, callback=get_rpm)
 
 GPIO.add_event_detect(buttonIP, GPIO.RISING,
                       callback=callback_IP, bouncetime=1000)
@@ -330,8 +335,11 @@ def get_data_serieel():
         DataRepository.create_historiek(
             3, 2, '2017-05-31 19:19:09', waardeLDR, "Dit is voorbeeldcommentaar ")
 
-        DataRepository.create_historiek(
-            7, 3, '2017-05-31 19:19:09', temperatuur[0:5], "Dit is temperatuurdata")
+        # DataRepository.create_historiek(
+        #     7, 3, '2017-05-31 19:19:09', temperatuur[0:5], "Dit is temperatuurdata")
+
+        # DataRepository.create_historiek(
+        #     7, 3, '2017-05-31 19:19:09', temperatuur, "Dit is temperatuurdata")
 
         time.sleep(0.005)
 
@@ -383,8 +391,8 @@ def buzzer1():
             #     "444444444444444444444444444444444444444444444444444444444444444444444444444")
 
 
-# thread_buzzer1 = threading.Timer(1, buzzer1)
-# thread_buzzer1.start()
+thread_buzzer1 = threading.Timer(1, buzzer1)
+thread_buzzer1.start()
 
 
 # ***LDR***
@@ -455,15 +463,29 @@ def send_data_fast():
                       'AfstandJSN4': status}, broadcast=True)
 
         # print('Verstuurd ***SPEED*** data')
-        status = waardeSpeedSensor
-        socketio.emit('B2F_verstuur_data_speed', {
-                      'speed': status}, broadcast=True)
+        # status = round(KMH)
+        # socketio.emit('B2F_verstuur_data_speed', {
+        #               'speed': status}, broadcast=True)
 
         time.sleep(1)
 
 
 send_data_fast_thread = threading.Timer(1, send_data_fast)
 send_data_fast_thread.start()
+
+
+# def send_speedData():
+#     while is_sending:
+#         print('Verstuurd ***SPEED*** data')
+#         status = round(KMH)
+#         socketio.emit('B2F_verstuur_data_speed', {
+#                       'speed': status}, broadcast=True)
+
+#         time.sleep(0.05)
+
+
+# send_speedData_thread = threading.Timer(1, send_speedData)
+# send_speedData_thread.start()
 
 
 @ app.route(endpoint + '/historiek', methods=['GET', 'POST'])
@@ -518,21 +540,21 @@ def main():
                 LCD.vanaf0()
                 LCD.stuur_letters(str(round(KMH)))
                 lelteller = lelteller + 1
-
-                # if(len(str(KMH)) == 1):
-                #     print("benner")
-                #     LCD.vanaf0()
-                #     LCD.stuur_letters("00")
-                #     LCD.vanaf2()
-                #     LCD.stuur_letters(str(round(KMH)))
-                # elif(len(str(KMH)) == 2):
-                #     LCD.vanaf0()
-                #     LCD.stuur_letters("0")
-                #     LCD.vanaf1()
-                #     LCD.stuur_letters(str(round(KMH)))
-                # elif(len(str(KMH)) == 3):
-                #     LCD.vanaf0()
-                #     LCD.stuur_letters(str(round(KMH)))
+                LCD.vanaf0()
+                if(KMH) < 10:
+                    # print("benner")
+                    # LCD.vanaf0()
+                    LCD.stuur_letters("  ")
+                    # LCD.vanaf2()
+                    LCD.stuur_letters(str(round(KMH)))
+                elif(KMH) < 100:
+                    LCD.vanaf0()
+                    LCD.stuur_letters(" ")
+                    # LCD.vanaf1()
+                    LCD.stuur_letters(str(round(KMH)))
+                else:
+                    # LCD.vanaf0()
+                    LCD.stuur_letters(str(round(KMH)))
 
                 # LCD.init_LCD()
                 # time.sleep(0.1)

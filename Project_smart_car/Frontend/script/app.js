@@ -4,36 +4,39 @@ const socket = io(`http://${lanIP}`);
 let htmlTemp, htmlInfo, htmlContact, htmlParkSens, visual1_top, visual2_top, visual3_top, 
 visual4_top, visual1_bottom, visual2_bottom, visual3_bottom,visual4_bottom, visual1_right,
 visual2_right, visual3_right, visual4_right, visual1_left, visual2_left, visual3_left, 
-visual4_left,htmlHistoriek;
+visual4_left,htmlHistory;
 
 
 
 
 const showHistoriek = function(jsonObject){
   console.log(jsonObject)
-  let htmlString = ` <tr>
+  let htmlString = ` 
+  <thead>
   <th>historyID</th>
   <th>deviceID</th>
   <th>actionID</th>
   <th>action Date</th>
   <th>value</th>
   <th>commentary</th>
-</tr>`
+</thead>`
 // let htmlString = `` 
-  const placeholder = document.querySelector('.js-historiek')
+  const placeholder = document.querySelector('.js-history')
   for(historiek of jsonObject.historiek){
     console.log(historiek)
     // htmlString += `<li class="js-historiek_option">ID: ${historiek.ActieID} ActieDatum: ${historiek.Actiedatum} kies</li>`
-    htmlString += ` <tr>
-   <td>${historiek.HistoriekID} </td>
-   <td>${historiek.DeviceID} </td>
-   <td>${historiek.ActieID} </td>
-   <td>${historiek.Actiedatum} </td>
-   <td>${historiek.Waarde} </td>
-   <td>${historiek.Commentaar} </td>
- 
+    htmlString +=
+    ` <tbody>
+    <tr>
+        <td data-label="historyID">${historiek.HistoriekID}</td>
+        <td data-label="deviceID">${historiek.DeviceID}</td>
+        <td data-label="actionID">${historiek.ActieID}</td>
+        <td data-label="actdate">${historiek.Actiedatum}</td>
+        <td data-label="value">${historiek.Waarde}</td>
+        <td data-label="commentary">${historiek.Commentaar}</td>
+    </tr>
    
-    </tr>`
+</tbody>`
 
     
   }
@@ -150,11 +153,8 @@ const listenToUI = function () {
    
     
 
-    // socket.on('B2F_verstuur_data_speed', function(jsonObject){
-  //   console.log(jsonObject)
-  //   document.querySelector('.js-speed').innerHTML = `${jsonObject.speed} km/h`
-  // })
-  // }
+  
+
   
   } 
 
@@ -176,6 +176,11 @@ const listenToSocket = function () {
     socket.on('B2F_verstuur_data_dallas', function(jsonObject){
       console.log(jsonObject)
       document.querySelector('.js-temperature').innerHTML = `${jsonObject.temperatuur}`
+    })
+
+    socket.on('B2F_verstuur_data_speed', function(jsonObject){
+      console.log(jsonObject)
+      document.querySelector('.js-speed').innerHTML = `${jsonObject.speed} km/h`
     })
   }
   else if(htmlParkSens){    
@@ -415,7 +420,7 @@ const init = function(){
   visual3_left = document.querySelector('.js-visual3_left')
   visual4_left = document.querySelector('.js-visual4_left')
 
-  htmlHistoriek = document.querySelector('.js-historiek')
+  htmlHistory = document.querySelector('.js-history')
   
 
   // console.log('DOM geladen')
@@ -430,7 +435,7 @@ const init = function(){
   listenToUI();
   listenToSocket();
 
-  if(htmlHistoriek){
+  if(htmlHistory){
     getHistoriek();
   }
 
