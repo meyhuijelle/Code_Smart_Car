@@ -374,6 +374,8 @@ const listenToUI = function () {
 
       }
       buttonONOFF.innerHTML = htmlString3;
+
+      socket.emit('F2B_switchOFF');
     })
 
   

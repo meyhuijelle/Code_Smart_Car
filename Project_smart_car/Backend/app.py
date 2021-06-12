@@ -20,6 +20,8 @@ from repositories.DataRepository import DataRepository
 from helpers.LCD_klasse import LCD
 from subprocess import check_output
 
+import subprocess
+
 LCD = LCD()
 
 # led3 = 21
@@ -463,23 +465,26 @@ def changeStateBuzzer(msg):
     # buzzer1()
 
 
-# @socketio.on('B2F_state_with_button')
-# def send_state():
+@socketio.on('F2B_switchOFF')
+def switchOFF():
+    subprocess.Popen(["sudo", "poweroff"])
 
+    # @socketio.on('B2F_state_with_button')
+    # def send_state():
 
-# socketio.emit('B2F_state_with_button', {
-#     'state': state_LEDs}, broadcast=True)
+    # socketio.emit('B2F_state_with_button', {
+    #     'state': state_LEDs}, broadcast=True)
 
-# socketio.emit('B2F_state_with_button', {
-#               'state': state_LEDs}, broadcast=True)
-# print(bool(msg.get('state')))
-# state_LEDs = bool(msg.get('state'))
-# print(state_LEDs)
+    # socketio.emit('B2F_state_with_button', {
+    #               'state': state_LEDs}, broadcast=True)
+    # print(bool(msg.get('state')))
+    # state_LEDs = bool(msg.get('state'))
+    # print(state_LEDs)
 
-# if state_LEDs == True:
-#     GPIO.output(led, 1)
-# elif state_LEDs == False:
-#     GPIO.output(led, 0)
+    # if state_LEDs == True:
+    #     GPIO.output(led, 1)
+    # elif state_LEDs == False:
+    #     GPIO.output(led, 0)
 
 
 def send_data():
