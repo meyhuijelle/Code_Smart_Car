@@ -261,8 +261,18 @@ const listenToUI = function () {
       }
       buttonLightsONOFF.innerHTML = htmlString2;
       const state = document.querySelector('.js-stateLights')
+      const stateForUI = document.querySelector('.js-headlightstate')
       const value = state.getAttribute('state')
       console.log(value)
+      let ONOFF = ""
+
+      if(value == "True"){
+        ONOFF = "ON"
+      }else if(value == "False"){
+        ONOFF = "OFF"
+      }
+
+      stateForUI.innerHTML = `Status headlights: ${ONOFF}`
       socket.emit('F2B_stateLights', {stateLights: state.getAttribute('state')});
 
       
@@ -413,6 +423,17 @@ const listenToSocket = function () {
       // let today = new Date();
       console.log(jsonObject)
       document.querySelector('.js-brightness').innerHTML = `${jsonObject.lichtsterkte}%`
+      const placeholder = document.querySelector('.js-recommendation')
+      let recommendation = ""
+      
+      if(jsonObject.lichtsterkte < 30){
+        recommendation = "ON"
+      }else{
+        recommendation = "OFF"
+      }
+
+      placeholder.innerHTML = `It's safe to turn your headlights: ${recommendation}`
+
     }) 
   
     socket.on('B2F_verstuur_data_dallas', function(jsonObject){
@@ -484,6 +505,21 @@ const listenToSocket = function () {
 
         }
         buttonLightsONOFF.innerHTML = htmlString2;
+
+        const stateForUI = document.querySelector('.js-headlightstate')
+
+
+        let ONOFF = ""
+
+        if(tellerLights == 1){
+          ONOFF = "ON"
+        }else {
+          ONOFF = "OFF"
+        }
+
+        console.log(`dit is de onoff ${ONOFF}`)
+
+        stateForUI.innerHTML = `Status headlights: ${ONOFF}`
 
 
 

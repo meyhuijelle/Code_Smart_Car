@@ -996,8 +996,9 @@ a:focus {
   border-radius: 15px;
   background-color: white;
   /* box-shadow: 0 10px 20px rgba(0,0,0,0.10); */
-  margin-top: -10px
+  margin-top: -10px;
   /* align-self: center; */
+  min-width: 116px;
 }
 
 .c-border{
