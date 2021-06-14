@@ -11,6 +11,7 @@ import threading
 from serial import Serial, PARITY_NONE
 import math
 import sys
+import datetime
 
 
 from flask_cors import CORS
@@ -292,7 +293,7 @@ def get_temp():
         print(geef_temp())
         # print(temperatuur[0:5])
         DataRepository.create_historiek(
-            7, 3, '2017-05-31 19:19:09', temperatuur[0:5], "Dit is temperatuurdata")
+            8, 3, datetime.datetime.now(), temperatuur[0:5], "Dit is temperatuurdata")
         time.sleep(10)
 
 
@@ -341,7 +342,7 @@ def get_data_serieel():
         # print(temperatuur[0:5])
 
         DataRepository.create_historiek(
-            3, 2, '2017-05-31 19:19:09', waardeLDR, "Dit is voorbeeldcommentaar ")
+            3, 2, datetime.datetime.now(), waardeLDR, "Dit is voorbeeldcommentaar ")
 
         # DataRepository.create_historiek(
         #     7, 3, '2017-05-31 19:19:09', temperatuur[0:5], "Dit is temperatuurdata")
@@ -429,6 +430,17 @@ def initial_connection():
     print('A new client connect')
     status = waardeLDR
     socketio.emit('B2F_verstuur_data_ldr', {'data': status}, broadcast=True)
+    # socketio.emit('B2F_history', broadcast=True)
+
+
+def sendHistory():
+    while True:
+        socketio.emit('B2F_history', broadcast=True)
+        time.sleep(10)
+
+
+history_Thread = threading.Timer(1, sendHistory)
+history_Thread.start()
 
 
 is_sending = True
@@ -457,8 +469,12 @@ def changeStateBuzzer(msg):
     print(msg.get('stateBuzzer'))
     if(msg.get('stateBuzzer') == "True"):
         buzzerState = True
+        DataRepository.create_historiek(
+            2, 4, datetime.datetime.now(), buzzerState, "De buzzer werd aan gezet")
     elif(msg.get('stateBuzzer') == "False"):
         buzzerState = False
+        DataRepository.create_historiek(
+            2, 5, datetime.datetime.now(), buzzerState, "De buzzer werd uit gezet")
 
     print(f"Dit is nu de state van de buzzer {buzzerState}")
 
@@ -594,6 +610,12 @@ def main():
             if(state_LEDs != vorige_state_leds):
                 socketio.emit('B2F_state_with_button', {
                     'state': status_for_front}, broadcast=True)
+                if state_LEDs == True:
+                    DataRepository.create_historiek(
+                        1, 6, datetime.datetime.now(), state_LEDs, "De LED werd aangezet")
+                if state_LEDs == False:
+                    DataRepository.create_historiek(
+                        1, 7, datetime.datetime.now(), state_LEDs, "De LED werd uitgezet")
 
             # print('jaaa')
             # print(state_LEDs)

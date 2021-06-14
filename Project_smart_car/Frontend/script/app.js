@@ -437,6 +437,7 @@ const listenToSocket = function () {
       placeholder.innerHTML = `It's safe to turn your headlights: ${recommendation}`
 
     }) 
+
   
     socket.on('B2F_verstuur_data_dallas', function(jsonObject){
       console.log(jsonObject)
@@ -735,6 +736,12 @@ const listenToSocket = function () {
   })
 
   
+}
+else if (htmlHistory){
+  socket.on('B2F_history', function(){
+    // console.log("jaaaaaaaaaaaaaaaaaaaaaaaa")
+    getHistoriek()
+  })
 }
  
 };
