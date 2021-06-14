@@ -467,7 +467,8 @@ def changeStateBuzzer(msg):
 
 @socketio.on('F2B_switchOFF')
 def switchOFF():
-    subprocess.Popen(["sudo", "poweroff"])
+    # subprocess.Popen(["sudo", "poweroff"])
+    subprocess.Popen(["/sbin/poweroff"])
 
     # @socketio.on('B2F_state_with_button')
     # def send_state():
