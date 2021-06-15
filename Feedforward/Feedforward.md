@@ -64,13 +64,13 @@ Hier komt de feedforward: wat ga ik concreet doen?
 
 ## Gesprek 2 (Datum: 25/05/2020)
 
-Lector:
+Lector: Frederik
 
 Vragen voor dit gesprek: Hoe kan ik de datum van nu opvragen?
 Hoe start ik terug van ID 50 voor in de databank?
 
-- [x] vraag 1:
-- [ ] vraag 2:
+- [x] vraag 1: Hoe kan ik de datum van nu opvragen?
+- [ ] vraag 2: Hoe start ik terug van ID 50 voor in de databank?
 
 Dit is de feedback op mijn vragen.
 
