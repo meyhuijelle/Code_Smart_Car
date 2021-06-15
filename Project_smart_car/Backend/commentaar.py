@@ -296,3 +296,201 @@
                 </div>
             </div>
         </section>
+
+
+
+
+opkuisen!!!!
+
+# led3 = 21
+# knop1 = Button(20)
+
+
+
+# Code voor Hardware
+
+# GPIO.output(LEDSTRING, GPIO.HIGH)
+# time.sleep(1)
+# GPIO.output(LEDSTRING, GPIO.LOW)
+
+# LED1 = 5
+# LED2 = 6
+# LEDs = [5, 6]
+
+# state_LED1 = False
+# state_LED2 = False
+
+# state = False
+
+# def thread_send_to_lCD():
+#     while counterButton == 2:
+#         LCD.stuur_letters(str(round(KMH)))
+#         time.sleep(0.3)
+#         LCD.init_LCD()
+
+
+# thread_LCD = threading.Timer(0.1, thread_send_to_lCD)
+
+     # while (counterButton == 2):
+
+        # LCD.nieuwe_lijn()
+        # stuur1 = f"{temperatuur}"
+        # stuur2 = "    "
+        # stuur3 = f"{waardeLDR}%"
+        # LCD.stuur_letters(stuur1)
+        # LCD.stuur_letters(stuur2)
+        # LCD.stuur_letters(stuur3)
+
+        # thread_LCD.start()
+
+        # localTeller = 0
+        # while True:
+        #     localTeller = localTeller + 1
+        # teVersturen = vorige_snelheid
+        #     LCD.stuur_letters(str(vorige_snelheid))
+        #     LCD.init_LCD()
+        #     time.sleep(0.05)
+        # # print(localTeller)
+        # time.sleep(0.5)
+
+    # thread_JSN.start()
+
+       lines = str.rstrip(line)  # weghalen van newlines \n.
+        # juiste regel vinden. --> indien niet voorkomt, geeft het -1 terug.
+
+                # waardeLDR = vall.rstrip()
+
+        # print("De lichtintensiteit van de LDR bedraagt: " + vall.rstrip() + " %")
+
+         # waardeSpeedSensor = data_arduino[1]
+
+                 # print(waardeSpeedSensor + "KM/H")
+
+                       # time.sleep(1)
+
+        # print(geef_temp())
+        # print(temperatuur[0:5])
+
+                # DataRepository.create_historiek(
+        #     7, 3, '2017-05-31 19:19:09', temperatuur[0:5], "Dit is temperatuurdata")
+
+        # DataRepository.create_historiek(
+        #     7, 3, '2017-05-31 19:19:09', temperatuur, "Dit is temperatuurdata")
+
+           # buzzer = GPIO.PWM(triggerPIN, 100)
+
+           # ***LDR***
+
+# ***Temperatuur***
+
+
+# ***Temperatuur***
+
+
+# socketio.emit('B2F_history', broadcast=True)
+
+# global state_LED_
+    # print(state_LEDs)
+
+
+
+    # print(f"fddsqfdsf{state}")
+
+    # state_LEDs = state
+
+
+    # buzzer1()
+
+# subprocess.Popen(["sudo", "poweroff"])
+
+
+
+   # @socketio.on('B2F_state_with_button')
+    # def send_state():
+
+    # socketio.emit('B2F_state_with_button', {
+    #     'state': state_LEDs}, broadcast=True)
+
+    # socketio.emit('B2F_state_with_button', {
+    #               'state': state_LEDs}, broadcast=True)
+    # print(bool(msg.get('state')))
+    # state_LEDs = bool(msg.get('state'))
+    # print(state_LEDs)
+
+    # if state_LEDs == True:
+    #     GPIO.output(led, 1)
+    # elif state_LEDs == False:
+    #     GPIO.output(led, 0)
+
+#  temperatuur[0:5]
+
+
+        # print('Verstuurd ***SPEED*** data')
+        # status = round(KMH)
+        # socketio.emit('B2F_verstuur_data_speed', {
+        #               'speed': status}, broadcast=True)
+
+
+
+
+
+
+
+
+
+# def send_speedData():
+#     while is_sending:
+#         print('Verstuurd ***SPEED*** data')
+#         status = round(KMH)
+#         socketio.emit('B2F_verstuur_data_speed', {
+#                       'speed': status}, broadcast=True)
+
+#         time.sleep(0.05)
+
+
+# send_speedData_thread = threading.Timer(1, send_speedData)
+# send_speedData_thread.start()
+
+
+
+# def snelheid():
+#     get_rpm()
+
+
+# snelheid_thread = threading.Timer(0.1, snelheid)
+# snelheid_thread.start()
+
+# in de main
+
+  # LCD.init_LCD()
+
+  
+            # print(f" leeeeeed {state_LEDs}")
+            # print(f" leeeeeedvorig {vorige_state_leds}")
+
+
+# print('jaaa')
+            # print(state_LEDs)
+            # print(vorige_state_leds)
+            # socketio.emit('B2F_state_with_button', {
+            #     'state': state_LEDs}, broadcast=True)
+
+            # if state_LEDs != vorige_state_leds:
+
+            # print(f"temp {str(temperatuur)[0:5]}")
+            # code_voor_callback()
+            # print(lelteller)
+
+            # print("benner")
+                    # LCD.vanaf0()
+
+                    # LCD.vanaf2()
+
+        # LCD.vanaf1()
+
+    # LCD.vanaf0()
+
+# LCD.init_LCD()
+                # time.sleep(0.1)
+                # LCD.vanaf0()
+                # LCD.stuur_letters("   ")
