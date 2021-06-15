@@ -1,3 +1,4 @@
+# ***imports*** these are the imports that need to be done. This to work with some parts.
 from io import StringIO
 from os import getegid, stat, truncate
 import re
@@ -34,6 +35,11 @@ waardeAfstand1 = 0
 waardeAfstand2 = 0
 waardeAfstand3 = 0
 waardeAfstand4 = 0
+
+vorigeWaardeAfstand1 = 0
+vorigeWaardeAfstand2 = 0
+vorigeWaardeAfstand3 = 0
+vorigeWaardeAfstand4 = 0
 
 waardeSpeedSensor = 0
 
@@ -132,6 +138,9 @@ def get_rpm(c):
     status = round(KMH)
     socketio.emit('B2F_verstuur_data_speed', {
         'speed': status}, broadcast=True)
+
+    DataRepository.create_historiek(
+        5, 2, datetime.datetime.now(), round(KMH), "This is speedsensor data")
 
     if(KMH != vorige_snelheid):
         print(f"{round(KMH)} km/h----------------------------------------")
@@ -293,7 +302,7 @@ def get_temp():
         print(geef_temp())
         # print(temperatuur[0:5])
         DataRepository.create_historiek(
-            8, 3, datetime.datetime.now(), temperatuur[0:5], "Dit is temperatuurdata")
+            8, 3, datetime.datetime.now(), temperatuur[0:5], "The dallas is reading data.")
         time.sleep(10)
 
 
@@ -342,7 +351,7 @@ def get_data_serieel():
         # print(temperatuur[0:5])
 
         DataRepository.create_historiek(
-            3, 2, datetime.datetime.now(), waardeLDR, "Dit is voorbeeldcommentaar ")
+            4, 3, datetime.datetime.now(), waardeLDR, "The LDR is reading data.")
 
         # DataRepository.create_historiek(
         #     7, 3, '2017-05-31 19:19:09', temperatuur[0:5], "Dit is temperatuurdata")
@@ -470,13 +479,13 @@ def changeStateBuzzer(msg):
     if(msg.get('stateBuzzer') == "True"):
         buzzerState = True
         DataRepository.create_historiek(
-            2, 4, datetime.datetime.now(), buzzerState, "De buzzer werd aan gezet")
+            2, 4, datetime.datetime.now(), buzzerState, "Buzzer turned ON")
     elif(msg.get('stateBuzzer') == "False"):
         buzzerState = False
         DataRepository.create_historiek(
-            2, 5, datetime.datetime.now(), buzzerState, "De buzzer werd uit gezet")
+            2, 5, datetime.datetime.now(), buzzerState, "Buzzer turned OFF")
 
-    print(f"Dit is nu de state van de buzzer {buzzerState}")
+    print(f"This is nu de state van de buzzer {buzzerState}")
 
     # buzzer1()
 
@@ -511,10 +520,19 @@ def send_data():
         socketio.emit('B2F_verstuur_data_ldr', {
                       'lichtsterkte': status}, broadcast=True)
 
+        DataRepository.create_historiek(
+            4, 2, datetime.datetime.now(), waardeLDR, "The LDR is sending data.")
+
         print('Verstuurd ***DALLAS*** data')
         status = temperatuur
         socketio.emit('B2F_verstuur_data_dallas', {
                       'temperatuur': status}, broadcast=True)
+
+        # print(str(temperatuur)[0:5])
+
+        DataRepository.create_historiek(
+            8, 2, datetime.datetime.now(),  str(temperatuur)[0:5], "The dallas is sending data.")
+        #  temperatuur[0:5]
 
         time.sleep(5)
 
@@ -524,28 +542,50 @@ verstuur_data_ldr_thread.start()
 
 
 def send_data_fast():
+    global vorigeWaardeAfstand1
+    global vorigeWaardeAfstand2
+    global vorigeWaardeAfstand3
+    global vorigeWaardeAfstand4
     while is_sending:
+
         # print('Verstuurd ***JSN1*** data')
         status = waardeAfstand1
         socketio.emit('B2F_verstuur_data_JSN1', {
-                      'AfstandJSN1': status}, broadcast=True)
+            'AfstandJSN1': status}, broadcast=True)
         # print('Verstuurd ***JSN2*** data')
         status = waardeAfstand2
         socketio.emit('B2F_verstuur_data_JSN2', {
-                      'AfstandJSN2': status}, broadcast=True)
+            'AfstandJSN2': status}, broadcast=True)
         # print('Verstuurd ***JSN3*** data')
         status = waardeAfstand3
         socketio.emit('B2F_verstuur_data_JSN3', {
-                      'AfstandJSN3': status}, broadcast=True)
+            'AfstandJSN3': status}, broadcast=True)
         # print('Verstuurd ***JSN4*** data')
         status = waardeAfstand4
         socketio.emit('B2F_verstuur_data_JSN4', {
-                      'AfstandJSN4': status}, broadcast=True)
+            'AfstandJSN4': status}, broadcast=True)
 
         # print('Verstuurd ***SPEED*** data')
         # status = round(KMH)
         # socketio.emit('B2F_verstuur_data_speed', {
         #               'speed': status}, broadcast=True)
+        if(waardeAfstand1 != vorigeWaardeAfstand1 or waardeAfstand2 != vorigeWaardeAfstand2 or waardeAfstand3 != vorigeWaardeAfstand3 or waardeAfstand4 != vorigeWaardeAfstand4):
+            DataRepository.create_historiek(
+                3, 2, datetime.datetime.now(),  waardeAfstand1, "JSN1 is sending data.")
+
+            DataRepository.create_historiek(
+                3, 2, datetime.datetime.now(),  waardeAfstand2, "JSN2 is sending data.")
+
+            DataRepository.create_historiek(
+                3, 2, datetime.datetime.now(),  waardeAfstand3, "JSN3 is sending data.")
+
+            DataRepository.create_historiek(
+                3, 2, datetime.datetime.now(),  waardeAfstand4, "JSN4' is sending data.")
+
+        vorigeWaardeAfstand1 = waardeAfstand1
+        vorigeWaardeAfstand2 = waardeAfstand2
+        vorigeWaardeAfstand3 = waardeAfstand3
+        vorigeWaardeAfstand4 = waardeAfstand4
 
         time.sleep(1)
 
@@ -612,10 +652,10 @@ def main():
                     'state': status_for_front}, broadcast=True)
                 if state_LEDs == True:
                     DataRepository.create_historiek(
-                        1, 6, datetime.datetime.now(), state_LEDs, "De LED werd aangezet")
+                        1, 6, datetime.datetime.now(), state_LEDs, "LED turned ON")
                 if state_LEDs == False:
                     DataRepository.create_historiek(
-                        1, 7, datetime.datetime.now(), state_LEDs, "De LED werd uitgezet")
+                        1, 7, datetime.datetime.now(), state_LEDs, "LED turned OFF")
 
             # print('jaaa')
             # print(state_LEDs)
